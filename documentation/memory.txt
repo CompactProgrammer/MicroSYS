@@ -1,7 +1,7 @@
 ===== Memory Map =====
 Address Size    Contains
 0x00000 4KB     IVT/BIOS/unused
-0x01000 16KB    Drivers
+0x01000 16KB    Kernel modules
 0x05000 8KB     Kernel
 0x07000 3KB     System buffer
 0x07c00 1KB     Bootloader
