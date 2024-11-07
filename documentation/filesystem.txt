@@ -1,0 +1,7 @@
+Root directory:
+    BOOTLDR     .BIN
+    MICROSYS    <DIR>
+        KNLCORE     .BIN
+        SHELL       .APP
+        KNLMODULES  <DIR>
+            EGAVIDEO    .MOD

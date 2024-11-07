@@ -5,6 +5,6 @@ Address Size    Contains
 0x05000 8KB     Kernel
 0x07000 3KB     System buffer
 0x07c00 1KB     Bootloader
-0x08000 32KB    Drivers
+0x08000 32KB    Shell area
 0x10000 576K    Program area
 0xa0000 384K    Video memory/BIOS
