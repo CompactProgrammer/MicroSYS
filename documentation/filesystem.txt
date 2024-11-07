@@ -2,6 +2,6 @@ Root directory:
     BOOTLDR     .BIN
     MICROSYS    <DIR>
         KNLCORE     .BIN
-        SHELL       .APP
+        COMMAND     .APP
         KNLMODULES  <DIR>
             EGAVIDEO    .MOD
