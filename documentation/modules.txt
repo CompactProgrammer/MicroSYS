@@ -13,4 +13,4 @@ Byte    Type
 0x01    Filesystem
 0x02    Video adapter
 0x03    Storage drive
-0x04    Device driver
+0xff    Misc. module
