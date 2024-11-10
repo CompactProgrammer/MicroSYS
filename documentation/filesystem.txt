@@ -8,3 +8,4 @@ Root directory:
             EGAVIDEO    .MOD
             HARDDISK    .MOD
             MISCIO      .MOD
+            CLIPBOARD   .MOD
