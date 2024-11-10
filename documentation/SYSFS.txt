@@ -1,13 +1,12 @@
 ===== SYSFS Structure =====
 Boot block
 Volume information
-Extended file table
 Root folder
 Data area
 
 ===== Boot Block =====
 The boot block is two sectors mainly used for boot code
-===== Volume Information =====
+===== Volume Information Sector =====
 Byte    Size    Contains
 0x00    2       SYSFS signature ('FS')
 0x02    2       Bytes per sector
@@ -18,15 +17,7 @@ Byte    Size    Contains
 0x0a    2       Number of heads
 0x0c    4       Volume ID
 0x10    1       Number of entries per folder
-0x11    1       Size of extended file table
-0x12    14      Volume label
-===== Extended File Table (EFT) =====
-These are used if blocks of a file aren't consecutive
-Entry 0 is unused
-Byte    Size    Contains
-0x00    2       First block in data area
-0x02    2       Last block in data area
-0x04    2       Next EFT entry (0 if last EFT entry)
+0x11    15      Volume label
 ===== Root Directory =====
 --- File Entry ---
 Byte    Size    Contains
@@ -64,3 +55,4 @@ Byte    Size    Contains
 0x1c    4       File size
 ===== Data Area =====
 This contains all the data in each file
+The last word in each block shows the next block in file

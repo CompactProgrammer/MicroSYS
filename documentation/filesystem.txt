@@ -1,7 +1,10 @@
 Root directory:
     BOOTLDR     .BIN
+    CONFIG      .SYS
     MICROSYS    <DIR>
         KNLCORE     .BIN
         COMMAND     .APP
         KNLMODULES  <DIR>
             EGAVIDEO    .MOD
+            HARDDISK    .MOD
+            MISCIO      .MOD
