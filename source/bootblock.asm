@@ -13,6 +13,9 @@ setup:
     .stack:
         mov bp, 0x8000
         mov sp, bp
+    .video:
+        mov ax, 2
+        int 0x10
 
 loadbootblock:
     mov ah, 2
