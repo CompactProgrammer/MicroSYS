@@ -27,7 +27,13 @@ Byte    Size    Contains
 0x00    2       First block in data area
 0x02    2       Last block in data area
 0x04    2       Next EFT entry (0xffff if last entry)
-0x06    2       Reserved
+0x06    1       EFT entry type
+0x07    1       Reserved
+--- EFT Entry Types ---
+Byte    Type
+0x00    Extra data blocks for file
+0x01    Bad/corrupted blocks
+0x02    Reserved blocks
 ===== Root Directory =====
 --- File Entry ---
 Byte    Size    Contains

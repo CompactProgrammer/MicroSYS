@@ -46,7 +46,8 @@ times 512-($-$$) db 0
 dw 0xaa55
 
 findrootdir:
-    mov ax
+    mov ax, [vis_secsineft]
+
 
 times 1024-($-$$) db 0
 
@@ -59,7 +60,7 @@ vis_secspertrack: dw 9
 vis_numofheads: dw 2
 vis_volumeid: db 'MSYS'
 vis_entriesperfolder: dw 128
-vis_secsineft: dw 0
+vis_secsineft: dw 8
 vis_reserved: dd 0
 vis_vollabel: db 'MICROSYS'
 
