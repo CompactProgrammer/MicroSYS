@@ -25,7 +25,7 @@ loadbootblock:
     jc loadbootblock
     jmp 0x7e00
 
-nobootldrmsg: db 'BOOTLDR.BIN not found$'
+nobootldrmsg: db 'Bootloader not found$'
 bootdisk: db 0
 
 printstr:
@@ -122,5 +122,15 @@ vis_reserved: dd 0
 vis_vollabel: db 'MICROSYS'
 
 lbatochs:
+
+booterror:
+    mov si, nobootldrmsg
+    call printstr
+    mov cx, 0x4000
+    .loop:
+        dec cx
+        cmp cx, 0
+        jne .loop
+        jmp 0xffff:0
 
 times 1536-($-$$) db 0
