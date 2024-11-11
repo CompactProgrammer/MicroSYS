@@ -4,8 +4,8 @@ Byte    Size    Contains
 0x01    1       Module type
 0x02    2       Memory required
 0x04    2       Code pointer
-0x06    2       Reserved
-0x08    24      Module name
+0x06    10      Reserved
+0x10    16      Module name
 
 Module types:
 Byte    Type
