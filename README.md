@@ -9,5 +9,5 @@ A micro operating system for the x86 architecture.
 # Minimum Requirements
 * Processor: 186 compatible
 * Memory: 128K
-* Storage: 720K floppy drive
+* Storage: 1.2MB floppy drive
 * Video: EGA compatible
