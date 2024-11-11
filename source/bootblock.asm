@@ -112,8 +112,8 @@ vis_signature: db 'FS'
 vis_bytespersec: dw 512
 vis_secsperblock: db 2
 vis_disktype: db 0xf7
-vis_secsinvol: dw 1440
-vis_secspertrack: dw 9
+vis_secsinvol: dw 2400
+vis_secspertrack: dw 15
 vis_numofheads: dw 2
 vis_volumeid: db 'MSYS'
 vis_secsrootfolder: dw 6
