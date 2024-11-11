@@ -31,9 +31,10 @@ Byte    Size    Contains
 0x07    1       Reserved
 --- EFT Entry Types ---
 Byte    Type
-0x00    Extra data blocks for file
-0x01    Bad/corrupted blocks
-0x02    Reserved blocks
+0x00    Unallocated blocks
+0x01    Allocated blocks
+0x02    Bad/corrupted blocks
+0x03    Reserved blocks
 ===== Root Directory =====
 --- File Entry ---
 Byte    Size    Contains
@@ -44,9 +45,8 @@ Byte    Size    Contains
 0x0f    1       Creation year
 0x10    4       Creation time/date
 0x14    2       Modification date
-0x16    2       First block in data area
-0x18    2       Last block in data area
-0x1a    2       First EFT entry (0xffff if no EFT entry)
+0x16    4       Reserved
+0x1a    2       First EFT entry
 0x1c    4       File size
 --- Subfolder entry ---
 0x00    1       Entry type (0x02 for subfolder)
@@ -65,9 +65,8 @@ Byte    Size    Contains
 0x0f    1       Creation year
 0x10    4       Creation time/date
 0x14    2       Modification date
-0x16    2       First block in data area
-0x18    2       Last block in data area
-0x1a    2       First EFT entry (0xffff if no EFT entry)
+0x16    4       Reserved
+0x1a    2       First EFT entry
 0x1c    4       File size
 ===== Data Area =====
 This contains all the data in each file
