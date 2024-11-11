@@ -1,5 +1,6 @@
 org 0x7c00
 bits 16
+cpu 186
 
 setup:
     .bootdisk:
@@ -97,7 +98,7 @@ convert2:
 loadfile:
     dec si
     mov ah, 2
-    mov al, 1
+    mov al, 8
     mov dl, [bootdisk]
     mov bx, 0x7000
     int 0x13
