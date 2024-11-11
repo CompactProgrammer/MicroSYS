@@ -5,7 +5,7 @@ Root directory:
         KNLCORE     .BIN
         COMMAND     .APP
         MODULES     <DIR>
-            EGAVIDEO    .MOD
+            EGAGRAPH    .MOD
             HARDDISK    .MOD
             MISCIO      .MOD
             CLIPBOARD   .MOD
