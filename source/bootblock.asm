@@ -25,7 +25,7 @@ loadbootblock:
     jc loadbootblock
     jmp 0x7e00
 
-nobootldrmsg: db 'No bootloader found$'
+nobootldrmsg: db 'BOOTLDR.BIN not found$'
 bootdisk: db 0
 
 printstr:
@@ -47,7 +47,64 @@ dw 0xaa55
 
 findrootdir:
     mov ax, [vis_secsineft]
-
+    add ax, 3
+convert:
+    call lbatochs
+loadrootdir:
+    mov ah, 2
+    mov al, 1
+    mov dl, [bootdisk]
+    mov bx, 0x8200
+    int 0x13
+    jc loadrootdir
+readfirstentry:
+    mov si, 0x8200
+    mov al, [si]
+    cmp al, 1
+    jne booterror
+    add si, 0x1a
+    mov ax, [si]
+    push ax
+loadeft:
+    mov ah, 2
+    mov al, 1
+    mov ch, 0
+    mov cl, 4
+    mov dh, 0
+    mov dl, [bootdisk]
+    mov bx, 0x8200
+    int 0x13
+    jc loadeft
+getentry:
+    mov si, 0x8200
+    pop ax
+    add si, ax
+    mov ax, [si]
+getlba:
+    mov bx, 0
+    mov bl, [vis_secsperblock]
+    mul bx
+    add ax, 3
+    mov bx, [vis_secsineft]
+    add ax, bx
+    mov bx, [vis_secsrootfolder]
+    add ax, bx
+    mov si, 4
+loopload:
+    inc ax
+convert2:
+    call lbatochs
+loadfile:
+    dec si
+    mov ah, 2
+    mov al, 1
+    mov dl, [bootdisk]
+    mov bx, 0x7000
+    int 0x13
+    jc loadfile
+    cmp si, 0
+    je 0x7000
+    jmp loopload
 
 times 1024-($-$$) db 0
 
@@ -59,9 +116,11 @@ vis_secsinvol: dw 1440
 vis_secspertrack: dw 9
 vis_numofheads: dw 2
 vis_volumeid: db 'MSYS'
-vis_entriesperfolder: dw 128
+vis_secsrootfolder: dw 6
 vis_secsineft: dw 8
 vis_reserved: dd 0
 vis_vollabel: db 'MICROSYS'
+
+lbatochs:
 
 times 1536-($-$$) db 0
