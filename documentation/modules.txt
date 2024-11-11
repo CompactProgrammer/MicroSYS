@@ -5,7 +5,7 @@ Byte    Size    Contains
 0x02    2       Memory required
 0x04    2       Code pointer
 0x06    2       Reserved
-0x08    8       Module name
+0x08    24      Module name
 
 Module types:
 Byte    Type
