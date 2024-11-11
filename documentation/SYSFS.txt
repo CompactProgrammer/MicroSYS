@@ -58,3 +58,11 @@ Byte    Size    Contains
 ===== Data Area =====
 This contains all the data in each file
 The last word in each block indicates the next block in file or other information
+--- Last Word Information ---
+Word    Meaning
+0x0000  Block is available
+0xfffc  Unused
+0xfffd  Reserved block
+0xfffe  Bad or corrupted block
+0xffff  Last block in file
+Other   Block allocated, next block in file
