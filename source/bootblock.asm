@@ -17,7 +17,9 @@ setup:
         mov ax, 2
         int 0x10
 
+mov si, 5
 loadbootblock:
+    dec si
     mov ah, 2
     mov al, 2
     mov ch, 0
@@ -26,8 +28,10 @@ loadbootblock:
     mov dl, [bootdisk]
     mov bx, 0x7e00
     int 0x13
-    jc loadbootblock
-    jmp 0x7e00
+    jnc 0x7e00
+    cmp si, 0
+    je booterror
+    jmp loadbootblock
 
 nobootldrmsg: db 'Bootloader not found$'
 bootdisk: db 0
@@ -64,13 +68,18 @@ findrootdir:
     add ax, 3
 convert:
     call lbatochs
+    mov si, 5
 loadrootdir:
+    dec si
     mov ah, 2
     mov al, 1
     mov dl, [bootdisk]
     mov bx, 0x8200
     int 0x13
-    jc loadrootdir
+    jnc readfirstentry
+    cmp si, 0
+    je booterror
+    jmp loadrootdir
 readfirstentry:
     mov si, 0x8200
     mov al, [si]
@@ -79,7 +88,9 @@ readfirstentry:
     add si, 0x1a
     mov ax, [si]
     push ax
+    mov si, 5
 loadeft:
+    dec si
     mov ah, 2
     mov al, 1
     mov ch, 0
@@ -88,7 +99,10 @@ loadeft:
     mov dl, [bootdisk]
     mov bx, 0x8200
     int 0x13
-    jc loadeft
+    jnc getentry
+    cmp si, 0
+    je booterror
+    jmp loadeft
 getentry:
     mov si, 0x8200
     pop ax
@@ -103,11 +117,11 @@ getlba:
     add ax, bx
     mov bx, [vis_secsrootfolder]
     add ax, bx
-    mov si, 4
 loopload:
     inc ax
 convert2:
     call lbatochs
+    mov si, 5
 loadfile:
     dec si
     mov ah, 2
@@ -115,9 +129,9 @@ loadfile:
     mov dl, [bootdisk]
     mov bx, 0x7000
     int 0x13
-    jc loadfile
+    jnc 0x7000
     cmp si, 0
-    je 0x7000
+    je booterror
     jmp loopload
 
 times 1024-($-$$) db 0
