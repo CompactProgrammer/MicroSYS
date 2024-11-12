@@ -46,6 +46,16 @@ printstr:
         popa
         ret
 
+booterror:
+    mov si, nobootldrmsg
+    call printstr
+    mov cx, 0x4000
+    .loop:
+        dec cx
+        cmp cx, 0
+        jne .loop
+        jmp 0xffff:0
+
 times 512-($-$$) db 0
 dw 0xaa55
 
@@ -126,15 +136,26 @@ vis_reserved: dd 0
 vis_vollabel: db 'MICROSYS'
 
 lbatochs:
-
-booterror:
-    mov si, nobootldrmsg
-    call printstr
-    mov cx, 0x4000
-    .loop:
-        dec cx
-        cmp cx, 0
-        jne .loop
-        jmp 0xffff:0
+    pusha
+    .sec:
+        mov bx, [vis_secspertrack]
+        div bx
+        inc dx
+        mov [.s], dl
+    .cyl:
+        mov bx, [vis_numofheads]
+        div bx
+        mov [.c], ax
+    .head:
+        mov [.h], dx
+    .done:
+        popa
+        mov ch, [.c+1]
+        mov cl, [.s+1]
+        mov dh, [.h+1]
+        ret
+    .c: dw 0
+    .h: dw 0
+    .s: dw 0
 
 times 1536-($-$$) db 0
