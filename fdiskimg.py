@@ -11,7 +11,7 @@ size = appendstats.st_size
 print("Built image size: " + str(size))
 
 if (size > wantedsize):
-    print ("Built image is greater than " + str((wantedsize/1024)/1024) + "M.")
+    print ("Built image is greater than " + str((wantedsize/1024)/1024) + "MB.")
     exit()
 
 while size < wantedsize:
