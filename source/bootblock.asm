@@ -63,6 +63,10 @@ booterror:
 times 512-($-$$) db 0
 dw 0xaa55
 
+print:
+    mov si, vis_vollabel
+    call printstr
+
 findrootdir:
     mov ax, [vis_secsineft]
     add ax, 3
@@ -148,6 +152,7 @@ vis_secsrootfolder: dw 6
 vis_secsineft: dw 8
 vis_reserved: dd 0
 vis_vollabel: db 'MICROSYS'
+db '$'
 
 lbatochs:
     pusha
