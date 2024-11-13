@@ -3,13 +3,13 @@ bits 16
 cpu 186
 
 setup:
-    .bootdisk:
-        mov [bootdisk], dl
     .segments:
         mov ax, 0
         mov ds, ax
         mov es, ax
         mov ss, ax
+    .bootdisk:
+        mov [bootdisk], dl
     .stack:
         mov bp, 0x8000
         mov sp, bp
