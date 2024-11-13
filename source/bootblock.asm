@@ -134,6 +134,21 @@ loadfile:
     je booterror
     jmp loopload
 
+times 1024-($-$$) db 0
+
+vis_signature: db 'FS'
+vis_bytespersec: dw 512
+vis_secsperblock: db 2
+vis_disktype: db 0xf7
+vis_secsinvol: dw 2400
+vis_secspertrack: dw 15
+vis_numofheads: dw 2
+vis_volumeid: db 'MSYS'
+vis_secsrootfolder: dw 6
+vis_secsineft: dw 8
+vis_reserved: dd 0
+vis_vollabel: db 'MICROSYS'
+
 lbatochs:
     pusha
     .sec:
@@ -156,20 +171,5 @@ lbatochs:
     .c: dw 0
     .h: dw 0
     .s: dw 0
-
-times 1024-($-$$) db 0
-
-vis_signature: db 'FS'
-vis_bytespersec: dw 512
-vis_secsperblock: db 2
-vis_disktype: db 0xf7
-vis_secsinvol: dw 2400
-vis_secspertrack: dw 15
-vis_numofheads: dw 2
-vis_volumeid: db 'MSYS'
-vis_secsrootfolder: dw 6
-vis_secsineft: dw 8
-vis_reserved: dd 0
-vis_vollabel: db 'MICROSYS'
 
 times 1536-($-$$) db 0
