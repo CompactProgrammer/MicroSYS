@@ -101,8 +101,7 @@ vis_secspertrack: dw 18
 vis_numofheads: dw 2
 vis_volumeid: db 'MSYS'
 vis_secsrootfolder: dw 6
-vis_secsineft: dw 8
-vis_reserved: dd 0
-vis_vollabel: db 'MICROSYS'
+vis_reserved: dw 0
+vis_vollabel: db 'MICROSYS    '
 
 times 1024-($-$$) db 0
