@@ -9,7 +9,7 @@ entry0:
     .myear: db 0
     .res: db 0
     .firstblock: dw 0
-    .lastblock: dw 0
+    .lastblock: dw 3
     .size: dd 4096
 
 times 3072-($-$$) db 0

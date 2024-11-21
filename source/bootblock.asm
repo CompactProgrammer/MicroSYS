@@ -86,9 +86,83 @@ lbatochs:
 times 510-($-$$) db 0
 dw 0xaa55
 
+mov si, 5
+getrootfolder:
+    dec si
+    mov ax, [vis_secsrootfolder]
+    mov ah, 2
+    mov ch, 0
+    mov cl, 3
+    mov dh, 0
+    mov dl, [bootdisk]
+    mov bx, 0x400
+    int 0x13
+    jnc getbootldrloc
+    cmp si, 0
+    jne getrootfolder
+    jmp booterror
+getbootldrloc:
+    mov cl, 100
+    mov si, 0x400
+    mov di, filename
+    .loop:
+        dec cl
+        call cmpfn
+        jnc .found
+        cmp cl, 0
+        je booterror
+        add si, 32
+        jmp .loop
+    .found:
+        add si, 0x18
+        mov ax, [ds:si]
+getchs:
+    add ax, [vis_secsrootfolder]
+    add ax, 2
+    call lbatochs
+segment:
+    mov ax, 0
+    mov es, ax
+    mov si, 5
+readandexec:
+    mov ah, 2
+    mov al, 8
+    mov dl, [bootdisk]
+    mov bx, 0x7000
+    int 0x10
+    jc .error
+    jmp 0x0700:0
+    .error:
+        cmp si, 0
+        je booterror
+        jmp readandexec
+
 hang:
     cli
     hlt
+
+filename: db 'BOOTLDR    BIN'
+
+cmpfn:
+    clc
+    pusha
+    mov cl, 14
+    .loop:
+        dec cl
+        mov ah, [si]
+        mov al, [di]
+        cmp ah, al
+        jne .noequ
+        cmp cl, 0
+        jmp .done
+        inc si
+        inc di
+        jmp .loop
+    .noequ:
+        stc
+    .done:
+        popa
+        ret
 
 times 992-($-$$) db 0
 
