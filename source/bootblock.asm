@@ -1,17 +1,18 @@
-org 0x7c00
+org 0
 bits 16
 cpu 186
 
 setup:
     .segments:
-        mov ax, 0
+        mov ax, 0x07c0
         mov ds, ax
         mov es, ax
+        mov ax, 0x0900
         mov ss, ax
     .bootdisk:
         mov [bootdisk], dl
     .stack:
-        mov bp, 0x8000
+        mov bp, 0
         mov sp, bp
     .video:
         mov ax, 2
@@ -26,22 +27,25 @@ loadbootblock:
     mov cl, 2
     mov dh, 0
     mov dl, [bootdisk]
-    mov bx, 0x7e00
+    mov bx, 0x200
     int 0x13
-    jnc 0x7e00
+    jnc 0x200
     cmp si, 0
     je booterror
-    mov si, testmsg
+    mov si, testmsg0
+    call printstr
+    mov si, testmsg1
     call printstr
 
 nobootldrmsg: db 'Bootloader not found$'
 bootdisk: db 0
+testmsg0: db 'Test message 0$'
 
 printstr:
     pusha
     mov ah, 0x0e
     .loop:
-        mov al, [si]
+        mov al, [ds:si]
         cmp al, '$'
         je .done
         int 0x10
@@ -54,25 +58,22 @@ printstr:
 booterror:
     mov si, nobootldrmsg
     call printstr
-    mov cx, 0x4000
-    .loop:
-        dec cx
-        cmp cx, 0
-        jne .loop
-        jmp 0xffff:0
+    mov ax, 0
+    int 0x16
+    jmp 0xffff:0
 
 times 512-($-$$) db 0
 dw 0xaa55
 
-testmsg:
-    db 'Test message$'
+testmsg1:
+    db 'Test message 1$'
 
 times 1024-($-$$) db 0
 
 vis_signature: db 'FS'
 vis_bytespersec: dw 512
 vis_secsperblock: db 2
-vis_disktype: db 0xf7
+vis_disktype: db 0xf2
 vis_secsinvol: dw 2400
 vis_secspertrack: dw 15
 vis_numofheads: dw 2
@@ -82,30 +83,5 @@ vis_secsineft: dw 8
 vis_reserved: dd 0
 vis_vollabel: db 'MICROSYS'
 db '$'
-
-lbatochs:
-    pusha
-    .sec:
-        mov bx, [vis_secspertrack]
-        mov dx, 0
-        div bx
-        inc dx
-        mov [.s], dl
-    .cyl:
-        mov bx, [vis_numofheads]
-        mov dx, 0
-        div bx
-        mov [.c], ax
-    .head:
-        mov [.h], dx
-    .done:
-        popa
-        mov ch, [.c+1]
-        mov cl, [.s+1]
-        mov dh, [.h+1]
-        ret
-    .c: dw 0
-    .h: dw 0
-    .s: dw 0
 
 times 1536-($-$$) db 0
