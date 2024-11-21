@@ -61,9 +61,30 @@ booterror:
 times 510-($-$$) db 0
 dw 0xaa55
 
+mov si, 5
+getrootfolder:
+    dec si
+    mov ax, 3
+    add ax, [ds:vis_secsineft]
+    call lbatochs
+    mov ah, 2
+    mov al, 1
+    mov dl, [bootdisk]
+    mov bx, 0x600
+    int 0x13
+    jnc .done
+    cmp si, 0
+    je booterror
+    .done:
+        mov si, 0x600
+        mov ah, 0x0e
+        mov cl, 13
 print:
-    mov si, vis_vollabel
-    call printstr
+    dec cl
+    mov al, [ds:si]
+    int 0x10
+    cmp cl, 0
+    jne print
 
 hang:
     cli
@@ -83,7 +104,6 @@ vis_secsrootfolder: dw 6
 vis_secsineft: dw 8
 vis_reserved: dd 0
 vis_vollabel: db 'MICROSYS'
-db '$'
 
 lbatochs:
     pusha
