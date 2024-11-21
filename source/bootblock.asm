@@ -120,18 +120,6 @@ getchs:
     add ax, [vis_secsrootfolder]
     add ax, 2
     call lbatochs
-print:
-    mov si, hexbuffer
-    mov al, ch
-    call bytetohexstr
-    call printstr
-    mov al, dh
-    call bytetohexstr
-    call printstr
-    mov al, cl
-    call bytetohexstr
-    call printstr
-    jmp hang
 segment:
     mov ax, 0
     mov es, ax
@@ -159,7 +147,7 @@ hexbuffer: db 'FFFF$'
 cmpfn:
     clc
     pusha
-    mov cl, 14
+    mov cl, 13
     .loop:
         dec cl
         mov ah, [si]
