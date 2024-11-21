@@ -120,6 +120,18 @@ getchs:
     add ax, [vis_secsrootfolder]
     add ax, 2
     call lbatochs
+print:
+    mov si, hexbuffer
+    mov al, ch
+    call bytetohexstr
+    call printstr
+    mov al, dh
+    call bytetohexstr
+    call printstr
+    mov al, cl
+    call bytetohexstr
+    call printstr
+    jmp hang
 segment:
     mov ax, 0
     mov es, ax
@@ -142,6 +154,7 @@ hang:
     hlt
 
 filename: db 'BOOTLDR    BIN'
+hexbuffer: db 'FFFF$'
 
 cmpfn:
     clc
@@ -160,6 +173,64 @@ cmpfn:
         jmp .loop
     .noequ:
         stc
+    .done:
+        popa
+        ret
+
+; INPUT
+; al    nibble to convert (low 4 bits)
+; si    pointer to buffer
+; OUTPUT
+; si    pointer to hex string
+nibbletohexstr:
+    pusha
+    .setup:
+        mov di, .hexdigits
+    .convert:
+        and ax, 0x000f
+        add di, ax
+        mov al, [di]
+        mov [si], al
+    .done:
+        popa
+        ret
+    .hexdigits: db '0123456789ABCDEF'
+
+; INPUT
+; al    byte to convert
+; si    pointer to buffer
+; OUTPUT
+; si    pointer to hex string
+bytetohexstr:
+    pusha
+    .convert:
+        push ax
+        and al, 0xf0
+        shr al, 1
+        shr al, 1
+        shr al, 1
+        shr al, 1
+        call nibbletohexstr
+        inc si
+        pop ax
+        call nibbletohexstr
+    .done:
+        popa
+        ret
+    
+; INPUT
+; ax    word to convert
+; si    pointer to buffer
+; OUTPUT
+; si    pointer to hex string
+wordtohexstr:
+    pusha
+    .convert:
+        add si, 2
+        call bytetohexstr
+        sub si, 2
+        mov al, ah
+        call bytetohexstr
     .done:
         popa
         ret
