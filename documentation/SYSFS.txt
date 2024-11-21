@@ -21,6 +21,13 @@ Byte    Size    Contains
 0x12    2       Sectors in EFT
 0x14    4       Reserved
 0x18    8       Volume label
+--- Disk Types ---
+Byte    Type
+0xf2    1.2MB floppy
+0xf3    360K floppy
+0xf4    1.44MB floppy
+0xf7    720K floppy
+0xf8    2.88MB floppy
 ===== Extended File Table (EFT) =====
 --- Entry ---
 Byte    Size    Contains
