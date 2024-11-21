@@ -1,8 +1,12 @@
-org 0x7000
+org 0x0000
 bits 16
 cpu 186
 
 setup:
+    .segments:
+        mov ax, 0x0700
+        mov es, ax
+        mov ds, ax
     .startmsg:
         mov si, startupmsg
         call printstr
@@ -17,7 +21,7 @@ printstr:
     pusha
     mov ah, 0x0e
     .loop:
-        mov al, [si]
+        mov al, [ds:si]
         cmp al, '$'
         je .done
         int 0x10

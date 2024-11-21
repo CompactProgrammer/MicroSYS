@@ -1,13 +1,12 @@
 ===== SYSFS Structure =====
 Boot block
-Volume information
-Extended file table
 Root folder
 Data area
 
 ===== Boot Block =====
 The boot block is two sectors mainly used for boot code
-===== Volume Information Sector =====
+Also contains the volume information at the very end of the block
+--- Volume Information ---
 Byte    Size    Contains
 0x00    2       SYSFS signature ('FS')
 0x02    2       Bytes per sector
@@ -17,10 +16,9 @@ Byte    Size    Contains
 0x08    2       Sectors per track
 0x0a    2       Number of heads
 0x0c    4       Volume ID
-0x10    2       Sectors in root folder (subfolders will always be 3 blocks in size)
-0x12    2       Sectors in EFT
-0x14    4       Reserved
-0x18    8       Volume label
+0x10    2       Sectors in root folder
+0x12    2       Reserved
+0x14    12      Volume label
 --- Disk Types ---
 Byte    Type
 0xf2    1.2MB floppy
@@ -28,52 +26,25 @@ Byte    Type
 0xf4    1.44MB floppy
 0xf7    720K floppy
 0xf8    2.88MB floppy
-===== Extended File Table (EFT) =====
+===== Root Directory =====
 --- Entry ---
 Byte    Size    Contains
-0x00    2       First block in data area
-0x02    2       Last block in data area
-0x04    2       Next EFT entry (0xffff if last entry)
-0x06    1       EFT entry type
-0x07    1       Reserved
---- EFT Entry Types ---
-Byte    Type
-0x00    Unallocated blocks
-0x01    Allocated blocks
-0x02    Bad/corrupted blocks
-0x03    Reserved blocks
-===== Root Directory =====
---- File Entry ---
-Byte    Size    Contains
-0x00    1       Entry type (0x01 for file)
-0x01    10      Filename
+0x00    11      Filename
 0x0b    3       File extension
-0x0e    1       File flags
+0x0e    1       Entry flags
 0x0f    1       Creation year
 0x10    4       Creation time/date
 0x14    2       Modification date
-0x16    4       Reserved
-0x1a    2       First EFT entry
+0x16    1       Modification year
+0x17    1       Reserved
+0x18    2       First block of file
+0x1a    2       Last block of file
 0x1c    4       File size
---- Subfolder entry ---
-0x00    1       Entry type (0x02 for subfolder)
-0x01    13      Subfolder name
-0x0e    1       Subfolder flags
-0x0f    1       Creation year
-0x10    4       Creation time/date
-0x14    2       Modification date
-0x16    2       First block in data area
-0x18    8       Reserved
---- Deleted file entry ---
-0x00    1       Entry type (0x03 for deleted file)
-0x01    10      Filename
-0x0b    3       File extension
-0x0e    1       File flags
-0x0f    1       Creation year
-0x10    4       Creation time/date
-0x14    2       Modification date
-0x16    4       Reserved
-0x1a    2       First EFT entry
-0x1c    4       File size
+--- Entry Flags ---
+Bit Flag
+0   Read-only
+1   Hidden
+2   System
+3   Backed up
 ===== Data Area =====
 This contains all the data in each file
