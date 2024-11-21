@@ -76,7 +76,7 @@ getrootfolder:
     cmp si, 0
     je booterror
     .done:
-        mov si, 0x600
+        mov si, 0x601
         mov ah, 0x0e
         mov cl, 13
 print:
