@@ -18,28 +18,8 @@ setup:
         mov ax, 2
         int 0x10
 
-mov si, 5
-loadbootblock:
-    dec si
-    mov ah, 2
-    mov al, 2
-    mov ch, 0
-    mov cl, 2
-    mov dh, 0
-    mov dl, [bootdisk]
-    mov bx, 0x200
-    int 0x13
-    jnc 0x200
-    cmp si, 0
-    je booterror
-    mov si, testmsg0
-    call printstr
-    mov si, testmsg1
-    call printstr
-
-nobootldrmsg: db 'Bootloader not found$'
+nobootldrmsg: db 'Boot error$'
 bootdisk: db 0
-testmsg0: db 'Test message 0$'
 
 printstr:
     pusha
@@ -65,17 +45,14 @@ booterror:
 times 512-($-$$) db 0
 dw 0xaa55
 
-testmsg1:
-    db 'Test message 1$'
-
 times 1024-($-$$) db 0
 
 vis_signature: db 'FS'
 vis_bytespersec: dw 512
 vis_secsperblock: db 2
-vis_disktype: db 0xf2
-vis_secsinvol: dw 2400
-vis_secspertrack: dw 15
+vis_disktype: db 0xf4
+vis_secsinvol: dw 2880
+vis_secspertrack: dw 18
 vis_numofheads: dw 2
 vis_volumeid: db 'MSYS'
 vis_secsrootfolder: dw 6
