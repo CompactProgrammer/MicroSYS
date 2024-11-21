@@ -31,7 +31,8 @@ loadbootblock:
     jnc 0x7e00
     cmp si, 0
     je booterror
-    jmp loadbootblock
+    mov si, testmsg
+    call printstr
 
 nobootldrmsg: db 'Bootloader not found$'
 bootdisk: db 0
@@ -63,80 +64,8 @@ booterror:
 times 512-($-$$) db 0
 dw 0xaa55
 
-print:
-    mov si, vis_vollabel
-    call printstr
-
-findrootdir:
-    mov ax, [vis_secsineft]
-    add ax, 3
-convert:
-    call lbatochs
-    mov si, 5
-loadrootdir:
-    dec si
-    mov ah, 2
-    mov al, 1
-    mov dl, [bootdisk]
-    mov bx, 0x8200
-    int 0x13
-    jnc readfirstentry
-    cmp si, 0
-    je booterror
-    jmp loadrootdir
-readfirstentry:
-    mov si, 0x8200
-    mov al, [si]
-    cmp al, 1
-    jne booterror
-    add si, 0x1a
-    mov ax, [si]
-    push ax
-    mov si, 5
-loadeft:
-    dec si
-    mov ah, 2
-    mov al, 1
-    mov ch, 0
-    mov cl, 4
-    mov dh, 0
-    mov dl, [bootdisk]
-    mov bx, 0x8200
-    int 0x13
-    jnc getentry
-    cmp si, 0
-    je booterror
-    jmp loadeft
-getentry:
-    mov si, 0x8200
-    pop ax
-    add si, ax
-    mov ax, [si]
-getlba:
-    mov bx, 0
-    mov bl, [vis_secsperblock]
-    mul bx
-    add ax, 3
-    mov bx, [vis_secsineft]
-    add ax, bx
-    mov bx, [vis_secsrootfolder]
-    add ax, bx
-loopload:
-    inc ax
-convert2:
-    call lbatochs
-    mov si, 5
-loadfile:
-    dec si
-    mov ah, 2
-    mov al, 8
-    mov dl, [bootdisk]
-    mov bx, 0x7000
-    int 0x13
-    jnc 0x7000
-    cmp si, 0
-    je booterror
-    jmp loopload
+testmsg:
+    db 'Test message$'
 
 times 1024-($-$$) db 0
 
@@ -158,11 +87,13 @@ lbatochs:
     pusha
     .sec:
         mov bx, [vis_secspertrack]
+        mov dx, 0
         div bx
         inc dx
         mov [.s], dl
     .cyl:
         mov bx, [vis_numofheads]
+        mov dx, 0
         div bx
         mov [.c], ax
     .head:
