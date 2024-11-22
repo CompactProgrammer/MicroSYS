@@ -2,6 +2,20 @@ org 0x0000
 bits 16
 cpu 186
 
+jmp setup
+
+vis_signature: db 'FS'
+vis_bytespersec: dw 512
+vis_secsperblock: db 2
+vis_disktype: db 0xf4
+vis_secsinvol: dw 2880
+vis_secspertrack: dw 18
+vis_numofheads: dw 2
+vis_volumeid: db 'MSYS'
+vis_secsrootfolder: db 6
+vis_reserved: times 3 db 0
+vis_vollabel: db 'MICROSYS    '
+
 setup:
     .segments:
         mov ax, 0x07c0
@@ -102,13 +116,11 @@ getrootfolder:
     jne getrootfolder
     jmp booterror
 getbootldrloc:
-    jmp hang
     mov cl, 80
     mov si, 0x400
     mov di, filename
     .loop:
         dec cl
-        call printfn
         call cmpfn
         jnc .found
         cmp cl, 0
@@ -124,6 +136,7 @@ getchs:
     add ax, bx
     add ax, 2
     call lbatochs
+    jmp hang
 segment:
     mov ax, 0
     mov es, ax
@@ -244,18 +257,4 @@ wordtohexstr:
         popa
         ret
 
-times 992-($-$$)-604 db 0
-
-vis_signature: db 'FS'
-vis_bytespersec: dw 512
-vis_secsperblock: db 2
-vis_disktype: db 0xf4
-vis_secsinvol: dw 2880
-vis_secspertrack: dw 18
-vis_numofheads: dw 2
-vis_volumeid: db 'MSYS'
-vis_secsrootfolder: db 6
-vis_reserved: times 3 db 0
-vis_vollabel: db 'MICROSYS    '
-
-times 1024-($-$$)-604 db 0
+times 1024-($-$$) db 0
