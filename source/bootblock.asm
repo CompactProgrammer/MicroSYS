@@ -244,7 +244,7 @@ wordtohexstr:
         popa
         ret
 
-times 992-($-$$) db 0
+times 992-($-$$)-604 db 0
 
 vis_signature: db 'FS'
 vis_bytespersec: dw 512
@@ -258,4 +258,4 @@ vis_secsrootfolder: db 6
 vis_reserved: times 3 db 0
 vis_vollabel: db 'MICROSYS    '
 
-times 1024-($-$$) db 0
+times 1024-($-$$)-604 db 0
