@@ -146,7 +146,7 @@ hang:
     cli
     hlt
 
-filename: db 'BOOTLDR    BIN$'
+filename: db 'MICROSYS   BIN$'
 hexbuffer: db 'FFFF$'
 
 cmpfn:
