@@ -89,8 +89,8 @@ dw 0xaa55
 mov si, 5
 getrootfolder:
     dec si
-    mov ax, [vis_secsrootfolder]
     mov ah, 2
+    mov al, [vis_secsrootfolder]
     mov ch, 0
     mov cl, 3
     mov dh, 0
@@ -102,11 +102,13 @@ getrootfolder:
     jne getrootfolder
     jmp booterror
 getbootldrloc:
-    mov cl, 100
+    jmp hang
+    mov cl, 80
     mov si, 0x400
     mov di, filename
     .loop:
         dec cl
+        call printfn
         call cmpfn
         jnc .found
         cmp cl, 0
@@ -117,7 +119,9 @@ getbootldrloc:
         add si, 0x18
         mov ax, [ds:si]
 getchs:
-    add ax, [vis_secsrootfolder]
+    mov bx, 0
+    mov bl, [vis_secsrootfolder]
+    add ax, bx
     add ax, 2
     call lbatochs
 segment:
@@ -125,6 +129,7 @@ segment:
     mov es, ax
     mov si, 5
 readandexec:
+    dec si
     mov ah, 2
     mov al, 8
     mov dl, [bootdisk]
@@ -141,26 +146,42 @@ hang:
     cli
     hlt
 
-filename: db 'BOOTLDR    BIN'
+filename: db 'BOOTLDR    BIN$'
 hexbuffer: db 'FFFF$'
 
 cmpfn:
     clc
     pusha
-    mov cl, 13
     .loop:
-        dec cl
-        mov ah, [si]
-        mov al, [di]
+        mov ah, [ds:si]
+        mov al, [es:di]
+        cmp ah, '$'
+        jmp .done
+        cmp al, '$'
+        jmp .done
         cmp ah, al
         jne .noequ
-        cmp cl, 0
-        jmp .done
         inc si
         inc di
         jmp .loop
     .noequ:
         stc
+    .done:
+        popa
+        ret
+
+printfn:
+    pusha
+    mov ah, 0x0e
+    mov cl, 14
+    .loop:
+        dec cl
+        mov al, [ds:si]
+        int 0x10
+        cmp cl, 0
+        je .done
+        inc si
+        jmp .loop
     .done:
         popa
         ret
@@ -233,8 +254,8 @@ vis_secsinvol: dw 2880
 vis_secspertrack: dw 18
 vis_numofheads: dw 2
 vis_volumeid: db 'MSYS'
-vis_secsrootfolder: dw 6
-vis_reserved: dw 0
+vis_secsrootfolder: db 6
+vis_reserved: times 3 db 0
 vis_vollabel: db 'MICROSYS    '
 
 times 1024-($-$$) db 0

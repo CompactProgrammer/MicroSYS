@@ -16,8 +16,8 @@ Byte    Size    Contains
 0x08    2       Sectors per track
 0x0a    2       Number of heads
 0x0c    4       Volume ID
-0x10    2       Sectors in root folder
-0x12    2       Reserved
+0x10    1       Sectors in root folder
+0x11    3       Reserved
 0x14    12      Volume label
 --- Disk Types ---
 Byte    Type
