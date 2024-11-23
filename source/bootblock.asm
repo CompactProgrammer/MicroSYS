@@ -97,71 +97,6 @@ lbatochs:
     .h: dw 0
     .s: dw 0
 
-times 510-($-$$) db 0
-dw 0xaa55
-
-mov si, 5
-getrootfolder:
-    dec si
-    mov ah, 2
-    mov al, [vis_secsrootfolder]
-    mov ch, 0
-    mov cl, 3
-    mov dh, 0
-    mov dl, [bootdisk]
-    mov bx, 0x400
-    int 0x13
-    jnc getbootldrloc
-    cmp si, 0
-    jne getrootfolder
-    jmp booterror
-getbootldrloc:
-    mov cl, 80
-    mov si, 0x400
-    mov di, filename
-    .loop:
-        dec cl
-        call cmpfn
-        jnc .found
-        cmp cl, 0
-        je booterror
-        add si, 32
-        jmp .loop
-    .found:
-        add si, 0x18
-        mov ax, [ds:si]
-getchs:
-    mov bx, 0
-    mov bl, [vis_secsrootfolder]
-    add ax, bx
-    add ax, 2
-    call lbatochs
-    jmp hang
-segment:
-    mov ax, 0
-    mov es, ax
-    mov si, 5
-readandexec:
-    dec si
-    mov ah, 2
-    mov al, 8
-    mov dl, [bootdisk]
-    mov bx, 0x7000
-    int 0x10
-    jc .error
-    jmp 0x0700:0
-    .error:
-        cmp si, 0
-        je booterror
-        jmp readandexec
-
-hang:
-    cli
-    hlt
-
-filename: db 'MICROSYS   BIN$'
-hexbuffer: db 'FFFF$'
-
 cmpfn:
     clc
     pusha
@@ -257,4 +192,68 @@ wordtohexstr:
         popa
         ret
 
-times (1024-($-$$))-(600) db 0
+times 510-($-$$) db 0
+dw 0xaa55
+
+mov si, 5
+getrootfolder:
+    dec si
+    mov ah, 2
+    mov al, [vis_secsrootfolder]
+    mov ch, 0
+    mov cl, 3
+    mov dh, 0
+    mov dl, [bootdisk]
+    mov bx, 0x400
+    int 0x13
+    jnc getbootldrloc
+    cmp si, 0
+    jne getrootfolder
+    jmp booterror
+getbootldrloc:
+    mov cl, 80
+    mov si, 0x400
+    mov di, filename
+    .loop:
+        dec cl
+        call cmpfn
+        jnc .found
+        cmp cl, 0
+        je booterror
+        add si, 32
+        jmp .loop
+    .found:
+        add si, 0x18
+        mov ax, [ds:si]
+getchs:
+    mov bx, 0
+    mov bl, [vis_secsrootfolder]
+    add ax, bx
+    add ax, 2
+    call lbatochs
+segment:
+    mov ax, 0x0700
+    mov es, ax
+    mov si, 5
+readandexec:
+    dec si
+    mov ah, 2
+    mov al, 8
+    mov dl, [bootdisk]
+    mov bx, 0
+    int 0x10
+    jc .error
+    jmp 0x0700:0
+    .error:
+        cmp si, 0
+        je booterror
+        jmp readandexec
+
+hang:
+    cli
+    hlt
+
+filename: db 'MICROSYS   BIN$'
+hexbuffer: db 'FFFF$'
+
+times 428-($-$$) db 0
