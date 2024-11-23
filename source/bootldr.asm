@@ -5,8 +5,8 @@ cpu 186
 setup:
     .segments:
         mov ax, 0x0700
-        mov es, ax
         mov ds, ax
+        mov es, ax
     .startmsg:
         mov si, startupmsg
         call printstr
