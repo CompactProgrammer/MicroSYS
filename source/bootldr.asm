@@ -11,7 +11,7 @@ setup:
         mov si, startupmsg
         call printstr
 
-halt:
+hang:
     cli
     hlt
 

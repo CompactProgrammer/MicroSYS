@@ -48,7 +48,7 @@ loadbootblock:
     je booterror
     jmp loadbootblock
 
-nobootldrmsg: db 'Boot error, press a key to reboot$'
+nobootldrmsg: db 'Boot error, press a key to reboot', 13, 10, '$'
 bootdisk: db 0
 
 printstr:
@@ -66,11 +66,17 @@ printstr:
         ret
 
 booterror:
-    mov si, nobootldrmsg
-    call printstr
-    mov ax, 0
-    int 0x16
-    jmp 0xffff:0
+    .segment:
+        mov ax, 0
+        mov ds, ax
+        mov es, ax
+    .print:
+        mov si, nobootldrmsg
+        call printstr
+    .wait:
+        mov ax, 0
+        int 0x16
+        int 0x19
 
 lbatochs:
     pusha
@@ -84,18 +90,18 @@ lbatochs:
         mov bx, [vis_numofheads]
         mov dx, 0
         div bx
-        mov [.c], ax
+        mov [.c], al
     .head:
-        mov [.h], dx
+        mov [.h], dl
     .done:
         popa
-        mov ch, [.c+1]
-        mov cl, [.s+1]
-        mov dh, [.h+1]
+        mov ch, [.c]
+        mov cl, [.s]
+        mov dh, [.h]
         ret
-    .c: dw 0
-    .h: dw 0
-    .s: dw 0
+    .c: db 0
+    .h: db 0
+    .s: db 0
 
 cmpfn:
     clc
@@ -231,17 +237,14 @@ getchs:
     add ax, bx
     add ax, 2
     call lbatochs
-segment:
-    mov ax, 0x0700
-    mov es, ax
     mov si, 5
 readandexec:
     dec si
     mov ah, 2
     mov al, 8
     mov dl, [bootdisk]
-    mov bx, 0
-    int 0x10
+    mov bx, 0x7000
+    int 0x13
     jc .error
     jmp 0x0700:0
     .error:
@@ -256,4 +259,4 @@ hang:
 filename: db 'MICROSYS   BIN$'
 hexbuffer: db 'FFFF$'
 
-times 428-($-$$) db 0
+times 1024-($-$$) db 0
