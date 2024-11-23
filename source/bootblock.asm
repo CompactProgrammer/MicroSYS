@@ -2,7 +2,7 @@ org 0x0000
 bits 16
 cpu 186
 
-jmp setup
+jmp near setup
 
 vis_signature: db 'FS'
 vis_bytespersec: dw 512
@@ -11,9 +11,9 @@ vis_disktype: db 0xf4
 vis_secsinvol: dw 2880
 vis_secspertrack: dw 18
 vis_numofheads: dw 2
-vis_volumeid: db 'MSYS'
 vis_secsrootfolder: db 6
-vis_reserved: times 3 db 0
+vis_volumeid: db 'MSYS'
+vis_reserved: dd 0
 vis_vollabel: db 'MICROSYS    '
 
 setup:
@@ -257,4 +257,4 @@ wordtohexstr:
         popa
         ret
 
-times 1024-($-$$) db 0
+times (1024-($-$$))-(600) db 0

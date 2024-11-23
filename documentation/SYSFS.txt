@@ -5,20 +5,21 @@ Data area
 
 ===== Boot Block =====
 The boot block is two sectors mainly used for boot code
-Also contains the volume information at the very end of the block
+Also contains the volume information at the very start of the block
 --- Volume Information ---
 Byte    Size    Contains
-0x00    2       SYSFS signature ('FS')
-0x02    2       Bytes per sector
-0x04    1       Sectors per block
-0x05    1       Disk type
-0x06    2       Sectors in volume
-0x08    2       Sectors per track
-0x0a    2       Number of heads
-0x0c    4       Volume ID
-0x10    1       Sectors in root folder
-0x11    3       Reserved
-0x14    12      Volume label
+0x00    3       JMP code
+0x03    2       SYSFS signature ('FS')
+0x05    2       Bytes per sector
+0x07    1       Sectors per block
+0x08    1       Disk type
+0x09    2       Sectors in volume
+0x0b    2       Sectors per track
+0x0d    2       Number of heads
+0x0f    1       Sectors in root folder
+0x10    4       Volume ID
+0x14    4       Reserved
+0x14    8       Volume label
 --- Disk Types ---
 Byte    Type
 0xf2    1.2MB floppy
