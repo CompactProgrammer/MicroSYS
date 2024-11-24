@@ -246,7 +246,15 @@ readandexec:
     mov bx, 0x7000
     int 0x13
     jc .error
-    jmp 0x0700:0
+    .segments:
+        mov ax, 0x0700
+        mov ds, ax
+        mov es, ax
+    .print:
+        mov si, 0
+        call printstr
+    .exec:
+        jmp 0x0700:0
     .error:
         cmp si, 0
         je booterror
