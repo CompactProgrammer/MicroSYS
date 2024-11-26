@@ -1,0 +1,16 @@
+===== Main Map =====
+Address  Size   Contains
+0x00000  4K     IVT/BIOS/MicroSYS data area
+0x01000  20K    Kernel
+0x06000  4K     Bootloader
+0x07000  8K     System buffer
+0x09000  4K     System stack
+0x0a000  24K    Kernel extensions
+0x10000  576K   Program area
+0xa0000  384K   Video memory & BIOS
+
+===== Kernel Map =====
+0x1000   8K     Kernel code
+0x3000   2K     Loaded extension table
+0x3800   4K     Reserved
+0x4800   6K     Kernel buffer

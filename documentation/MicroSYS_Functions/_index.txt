@@ -1,0 +1,27 @@
+0x00 - Terminate
+0x01 - Keyboard input
+0x02 - Print character
+0x03 - Debugger output
+0x04 - Print string
+0x05 - Check for keyboard input
+0x06 - Clear screen
+0x07 - Get/set INT vector
+0x08 - Get/set date
+0x09 - Get/set time
+0x0a - Get MicroSYS version
+0x10 - Make directory
+0x11 - Delete directory
+0x12 - Set current directory
+0x13 - Create file
+0x14 - Delete file
+0x15 - Open file
+0x16 - Close file
+0x17 - Get/move file cursor
+0x18 - Read file
+0x19 - Write file
+0x1a - Get/set attributes
+0x1b - Rename file
+0x1c - Move file
+0x1d - Get file size
+0x1e - Get time & date of file
+0x1f - Commit unsaved file data

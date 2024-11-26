@@ -1,0 +1,9 @@
+MicroSYS Function 0x00 - Terminate
+
+===== Expects =====
+AH  0x00
+===== Returns =====
+None
+===== Info =====
+Exit to the parent program.
+If there's no parent program, exit to the shell.

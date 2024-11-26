@@ -247,11 +247,11 @@ readandexec:
     mov ah, 2
     mov al, 8
     mov dl, [ds:bootdisk]
-    mov bx, 0x7000
+    mov bx, 0x6000
     int 0x13
     jc .error
     .exec:
-        jmp 0x0700:0
+        jmp 0x0600:0
     .error:
         cmp si, 0
         je booterror
