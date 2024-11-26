@@ -1,7 +1,7 @@
 MicroSYS Function 0x00 - Terminate
 
 ===== Expects =====
-AH  0x00
+AH      0x00
 ===== Returns =====
 None
 ===== Info =====

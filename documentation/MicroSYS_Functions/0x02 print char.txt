@@ -1,0 +1,9 @@
+MicroSYS Function 0x02 - Print Character
+
+===== Expects =====
+AH      0x02
+AL      ASCII code to print
+===== Returns =====
+None
+===== Info =====
+Prints a character to the screen
