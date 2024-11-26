@@ -5,7 +5,8 @@ Address  Size   Contains
 0x06000  4K     Bootloader
 0x07000  8K     System buffer
 0x09000  4K     System stack
-0x0a000  24K    Kernel extensions
+0x0a000  4K     Shell resident area
+0x0b000  20K    Kernel extensions
 0x10000  576K   Program area
 0xa0000  384K   Video memory & BIOS
 
