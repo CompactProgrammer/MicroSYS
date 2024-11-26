@@ -55,7 +55,7 @@ printstr:
     pusha
     mov ah, 0x0e
     .loop:
-        mov al, [si]
+        mov al, [ds:si]
         cmp al, '$'
         je .done
         int 0x10
@@ -240,19 +240,16 @@ getchs:
     mov si, 5
 readandexec:
     dec si
+    mov ax, 0x07c0
+    mov ds, ax
+    mov ax, 0
+    mov es, ax
     mov ah, 2
     mov al, 8
-    mov dl, [bootdisk]
+    mov dl, [ds:bootdisk]
     mov bx, 0x7000
     int 0x13
     jc .error
-    .segments:
-        mov ax, 0x0700
-        mov ds, ax
-        mov es, ax
-    .print:
-        mov si, 0
-        call printstr
     .exec:
         jmp 0x0700:0
     .error:
