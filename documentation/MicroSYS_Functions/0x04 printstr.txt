@@ -1,0 +1,9 @@
+MicroSYS Function 0x04 - Print String
+
+===== Expects =====
+AH      0x04
+DS:SI   Pointer to string
+===== Returns =====
+None
+===== Info =====
+Prints a string terminated by '$' to the screen.
