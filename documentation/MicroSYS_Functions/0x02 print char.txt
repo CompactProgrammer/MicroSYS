@@ -6,4 +6,4 @@ AL      ASCII code to print
 ===== Returns =====
 None
 ===== Info =====
-Prints a character to the screen
+Prints a character to the screen.
