@@ -10,6 +10,14 @@ setup:
     .startmsg:
         mov si, startupmsg
         call printstr
+    .wait:
+        mov ah, 0x86
+        mov cx, 0x001e
+        mov dx, 0x8480
+        int 0x15
+    .donesetup:
+        xchg bx, bx
+        call newline
 
 hang:
     cli
