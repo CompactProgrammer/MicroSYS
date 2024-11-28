@@ -1,11 +1,12 @@
-Root directory:
-    BOOTLDR     .BIN
+Root folder (no subfolders):
+    COMMAND     .COM
     CONFIG      .SYS
+    SYSBOOT     .BIN
+    SYSKNL      .BIN
+
+Root folder (with subfolders):
+    SYSBOOT     .BIN
     MICROSYS    <DIR>
-        KNLCORE     .BIN
-        COMMAND     .APP
-        MODULES     <DIR>
-            EGAGRAPH    .MOD
-            HARDDISK    .MOD
-            MISCIO      .MOD
-            CLIPBOARD   .MOD
+        COMMAND     .EXE
+        CONFIG      .SYS
+        SYSKNL      .BIN

@@ -5,7 +5,10 @@ cpu 186
 jmp setup
 
 setup:
-
+    .segments:
+        mov ax, 0x0100
+        mov ds, ax
+        mov es, ax
 
 ; put function code in AX
 ; put parameters in stack

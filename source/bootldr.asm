@@ -4,7 +4,7 @@ cpu 186
 
 setup:
     .segments:
-        mov ax, 0x0700
+        mov ax, 0x0a00
         mov ds, ax
         mov es, ax
     .startmsg:
@@ -17,18 +17,6 @@ hang:
 
 startupmsg: db 'Starting MicroSYS...$'
 
-printstr:
-    pusha
-    mov ah, 0x0e
-    .loop:
-        mov al, [ds:si]
-        cmp al, '$'
-        je .done
-        int 0x10
-        inc si
-        jmp .loop
-    .done:
-        popa
-        ret
+%include 'include/boot.inc'
 
 times 4096-($-$$) db 0
