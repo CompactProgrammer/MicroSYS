@@ -1,8 +1,0 @@
-MicroSYS Function 0x01 - Keyboard Input
-
-===== Expects =====
-AH      0x01
-===== Returns =====
-AL      ASCII code
-===== Info =====
-Reads (waits for) a character from the keyboard.

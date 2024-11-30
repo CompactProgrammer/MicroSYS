@@ -131,3 +131,39 @@ wordtohexstr:
     .done:
         popa
         ret
+
+; INPUT
+; ax    LBA sector
+; es:bx pointer to buffer
+; dh    sectors to read
+; dl    drive number
+readsectors:
+    clc
+    pusha
+    mov si, 10
+    .loop:
+        dec dh
+        push ax
+        push dx
+        call lbatochs
+        mov ah, 2
+        mov al, 1
+        int 0x13
+        jc .error
+        pop dx
+        pop ax
+        cmp dh, 0
+        je .done
+        inc ax
+        add bx, 0x200
+        jmp .loop
+    .error:
+        pop dx
+        pop ax
+        dec si
+        cmp si, 0
+        jne .loop
+        stc
+    .done:
+        popa
+        ret

@@ -1,8 +1,0 @@
-MicroSYS Function 0x05 - Check for Keyboard Input
-
-===== Expects =====
-AH      0x05
-===== Returns =====
-AL      ASCII code (0 if no data in buffer)
-===== Info =====
-Checks for a character from the keyboard.

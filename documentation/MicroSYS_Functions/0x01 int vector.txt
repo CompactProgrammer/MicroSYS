@@ -1,0 +1,10 @@
+MicroSYS Function 0x01 - Get/Set INT Vector
+
+===== Expects =====
+AH      0 = get, 1 = set
+AL      INT vector
+CX:DX   Pointer to set vector to (if setting)
+===== Returns =====
+CX:DX   Pointer of vector (if getting)
+===== Info =====
+Gets or sets INT vector.

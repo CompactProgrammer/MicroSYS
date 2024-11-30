@@ -24,7 +24,7 @@ setup:
         mov ax, 0x0700
         mov ss, ax
     .bootdisk:
-        mov [bootdisk], dl
+        mov [ds:bootdisk], dl
     .rstdisks:
         mov ax, 0
         int 0x13
@@ -40,6 +40,7 @@ getrootfolder:
     dec si
     mov ah, 2
     mov al, [vis_secsrootfolder]
+    inc al
     mov ch, 0
     mov cl, 3
     mov dh, 0
@@ -51,7 +52,6 @@ getrootfolder:
     jne getrootfolder
     jmp booterror
 getbootldrloc:
-    xchg bx, bx
     mov cl, 80
     mov si, 0x400
     mov di, filename
@@ -67,27 +67,25 @@ getbootldrloc:
         add si, 0x18
         mov ax, [ds:si]
 getchs:
-    xchg bx, bx
     mov bx, 0
     mov bl, [vis_secsrootfolder]
     add ax, bx
     add ax, 2
     call lbatochs
-    mov si, 5
     xchg bx, bx
 readandexec:
-    dec si
+    push ax
     mov ax, 0
     mov es, ax
-    mov ah, 2
-    mov al, 8
+    pop ax
+    mov dh, 16
     mov dl, [ds:bootdisk]
-    mov bx, 0xa000
-    int 0x13
+    mov bx, 0x1000
+    call readsectors
     jc .error
     .exec:
         xchg bx, bx
-        jmp 0x0a00:0
+        jmp 0x0100:0
     .error:
         cmp si, 0
         je booterror
@@ -97,7 +95,7 @@ hang:
     cli
     hlt
 
-filename: db 'SYSBOOT    BIN$'
+filename: db 'MICROSYS   SYS$'
 hexbuffer: db 'FFFF$'
 bootdisk: db 0
 

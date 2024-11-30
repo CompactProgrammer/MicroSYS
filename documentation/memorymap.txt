@@ -2,9 +2,19 @@
 Address  Size   Contains
 0x00000  4K     IVT/BIOS/MicroSYS data area
 0x01000  24K    System core
-0x07000  4K     System stack (0x7c00-0x7dff contains boot disk code)
-0x08000  8K     Small system buffer
-0x0a000  4K     Bootloader
-0x0b000  20K    Large system buffer
+0x07000  3K     System stack
+0x07c00  1K     Boot block
+0x08000  16K    System buffer
+0x0c000  16K    Device drivers
 0x10000  576K   Program area
 0xa0000  384K   Video memory & BIOS
+
+===== MicroSYS Data Area =====
+Addr    Bytes   Contains
+0x800   1       Boot disk number
+0x801   2       Conventional memory in KB
+0x803   1       Boot type
+0x804   8       MicroSYS version ID
+0x80c   2       Equipment list
+0x80e   1       Drive A: disk number
+0x80f   1       Drive B: disk number

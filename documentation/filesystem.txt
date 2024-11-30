@@ -1,12 +1,13 @@
 Root folder (no subfolders):
-    COMMAND     .COM
+    COMMAND     .EXE
     CONFIG      .SYS
-    SYSBOOT     .BIN
-    SYSKNL      .BIN
+    IO          .SYS
+    MICROSYS    .SYS
 
 Root folder (with subfolders):
-    SYSBOOT     .BIN
     MICROSYS    <DIR>
         COMMAND     .EXE
         CONFIG      .SYS
-        SYSKNL      .BIN
+        MICROSYS    .SYS
+        DRIVERS     <DIR>
+            IO          .SYS

@@ -1,8 +1,0 @@
-MicroSYS Function 0x06 - Clear Screen
-
-===== Expects =====
-AH      0x06
-===== Returns =====
-None
-===== Info =====
-Clears the screen.
