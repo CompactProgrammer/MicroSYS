@@ -1,13 +1,14 @@
 ===== Main Map =====
-Address  Size   Contains
-0x00000  4K     IVT/BIOS/MicroSYS data area
-0x01000  24K    System core
-0x07000  3K     System stack
-0x07c00  1K     Boot block
-0x08000  16K    System buffer
-0x0c000  16K    Device drivers
-0x10000  576K   Program area
-0xa0000  384K   Video memory & BIOS
+Address     Size    Contains
+0x000000    4K      IVT/BIOS/MicroSYS data area
+0x001000    24K     System core
+0x007000    3K      System stack
+0x007c00    1K      Boot block
+0x008000    32K     System buffer
+0x010000    320K    Device drivers
+0x060000    256K    System program area
+0x0a0000    384K    Video memory & BIOS
+0x100000    ...     Program area
 
 ===== MicroSYS Data Area =====
 Addr    Bytes   Contains

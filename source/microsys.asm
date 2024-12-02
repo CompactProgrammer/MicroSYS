@@ -1,6 +1,6 @@
 org 0x0000
 bits 16
-cpu 186
+cpu 286
 
 jmp setup
 
@@ -25,31 +25,5 @@ hang:
     hlt
 
 welcomemsg: db 'MicroSYS$'
-
-; --------------------------------
-; |      Interrupt Handlers      |
-; --------------------------------
-
-int21handler:
-    pusha
-    cmp ah, 0
-    je functerminate
-    cmp ah, 1
-    je funcintvector
-    cmp ah, 2
-    je funcversion
-    popa
-    mov ah, 1
-    iret
-
-functerminate:
-    popa
-    iret
-funcintvector:
-    popa
-    iret
-funcversion:
-    popa
-    iret
 
 times 8192-($-$$) db 0

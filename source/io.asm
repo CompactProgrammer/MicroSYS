@@ -1,6 +1,6 @@
 org 0x0000
 bits 16
-cpu 186
+cpu 286
 
 header:
     .initcode: dw setup
@@ -39,12 +39,9 @@ ps2setup:
         jc .error
 
 intsetup:
-    .int16:
-        mov ah, 1
-        mov al, 0x16
-        mov cx, [header.relocseg]
-        mov dx, [int16handler]
-        int 0x21
+
+setupdone:
+    ret
 
 int16handler:
     pusha

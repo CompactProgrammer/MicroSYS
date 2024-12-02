@@ -1,9 +1,0 @@
-MicroSYS Function 0x02 - Get MicroSYS Version
-
-===== Expects =====
-AH      0x02
-===== Returns =====
-AH      Major version number
-AL      Minor version number
-===== Info =====
-Returns the MicroSYS version.
