@@ -1,6 +1,6 @@
 org 0x0000
 bits 16
-cpu 286
+cpu 186
 
 jmp setup
 

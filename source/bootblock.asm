@@ -4,17 +4,24 @@ cpu 286
 
 jmp near setup
 
-vis_signature: db 'FS'
-vis_bytespersec: dw 512
-vis_secsperblock: db 2
-vis_disktype: db 0xf4
-vis_secsinvol: dw 2880
-vis_secspertrack: dw 18
-vis_numofheads: dw 2
-vis_secsrootfolder: db 6
-vis_volumeid: db 'MSYS'
-vis_reserved: dd 0
-vis_vollabel: db 'MICROSYS    '
+sysfs_signature: db 0x29
+sysfs_bytespersec: dw 512
+sysfs_secsperblock: db 1
+sysfs_bootblock: db 2
+sysfs_secsinvolume: dw 2880
+sysfs_blocksperdir: db 8
+sysfs_secsperbet: db 9
+sysfs_secspertrack: dw 18
+sysfs_numofheads: dw 2
+sysfs_secsbeforefs: dd 0
+sysfs_int13: db 0
+sysfs_drivetype: db 0xf4
+sysfs_serial: db 'MSYS'
+sysfs_betroot: dw 1
+sysfs_bytesperbet: db 3
+sysfs_reserved: times 3 db 0
+sysfs_volumelabel:
+    .label: dw __utf16__('MICROSYS 0.10   ')
 
 setup:
     .segments:
@@ -34,69 +41,15 @@ setup:
     .video:
         mov ax, 2
         int 0x10
-
-mov si, 5
-getrootfolder:
-    dec si
-    mov ah, 2
-    mov al, [vis_secsrootfolder]
-    inc al
-    mov ch, 0
-    mov cl, 3
-    mov dh, 0
-    mov dl, [bootdisk]
-    mov bx, 0x400
-    int 0x13
-    jnc getbootldrloc
-    cmp si, 0
-    jne getrootfolder
-    jmp booterror
-getbootldrloc:
-    mov cl, 80
-    mov si, 0x400
-    mov di, filename
-    .loop:
-        dec cl
-        call cmpfn
-        jnc .found
-        cmp cl, 0
-        je booterror
-        add si, 32
-        jmp .loop
-    .found:
-        add si, 0x18
-        mov ax, [ds:si]
-getchs:
-    mov bx, 0
-    mov bl, [vis_secsrootfolder]
-    add ax, bx
-    add ax, 2
-    call lbatochs
-    xchg bx, bx
-readandexec:
-    push ax
-    mov ax, 0
-    mov es, ax
-    pop ax
-    mov dh, 16
-    mov dl, [ds:bootdisk]
-    mov bx, 0x1000
-    call readsectors
-    jc .error
-    .exec:
-        xchg bx, bx
-        jmp 0x0100:0
-    .error:
-        cmp si, 0
-        je booterror
-        jmp readandexec
+    .message:
+        mov si, startmsg
+        call printstr
 
 hang:
     cli
     hlt
 
-filename: db 'MICROSYS   SYS$'
-hexbuffer: db 'FFFF$'
+filename: db __utf16__('MICROSYS    SYS$')
 bootdisk: db 0
 
 %include 'include/boot.inc'
@@ -104,13 +57,13 @@ bootdisk: db 0
 lbatochs:
     pusha
     .sec:
-        mov bx, [vis_secspertrack]
+        mov bx, [sysfs_secspertrack]
         mov dx, 0
         div bx
         inc dx
         mov [.s], dl
     .cyl:
-        mov bx, [vis_numofheads]
+        mov bx, [sysfs_numofheads]
         mov dx, 0
         div bx
         mov [.c], al
@@ -125,6 +78,8 @@ lbatochs:
     .c: db 0
     .h: db 0
     .s: db 0
+
+startmsg: db 'Starting MicroSYS $'
 
 times 510-($-$$) db 0
 dw 0xaa55

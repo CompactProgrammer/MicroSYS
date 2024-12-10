@@ -36,7 +36,7 @@ ps2waitdata:
 ; al    data
 ; carry flag set if no data
 ps2checkdata:
-    stc
+    clc
     pusha
     .check:
         in al, 0x64
@@ -44,12 +44,17 @@ ps2checkdata:
         jz .nodata
     .read:
         in al, 0x60
+        mov [.output], al
         jmp .done
     .nodata:
         stc
+        mov al, 0
+        mov [.output], al
     .done:
         popa
+        mov al, [.output]
         ret
+    .output: db 0
 
 ; INPUT
 ; al    data
