@@ -37,7 +37,28 @@ booterror:
 
 nobootldrmsg: db 'Boot error, press a key to reboot', 13, 10, '$'
 
-cmpfn:
+cmpfn_utf16:
+    clc
+    pusha
+    .loop:
+        mov ax, [ds:si]
+        mov bx, [es:di]
+        cmp ax, __utf16__('$')
+        jmp .done
+        cmp bx, __utf16__('$')
+        jmp .done
+        cmp ax, bx
+        jne .noequ
+        add si, 2
+        add di, 2
+        jmp .loop
+    .noequ:
+        stc
+    .done:
+        popa
+        ret
+
+cmpfn_utf8:
     clc
     pusha
     .loop:

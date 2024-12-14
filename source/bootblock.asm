@@ -6,11 +6,11 @@ jmp near setup
 
 sysfs_signature: db 0x29
 sysfs_bytespersec: dw 512
-sysfs_secsperblock: db 1
+sysfs_secsperblock: db 2
 sysfs_bootblock: db 2
 sysfs_secsinvolume: dw 2880
-sysfs_blocksperdir: db 8
-sysfs_secsperbet: db 9
+sysfs_blocksperdir: db 6
+sysfs_secsperbet: db 12
 sysfs_secspertrack: dw 18
 sysfs_numofheads: dw 2
 sysfs_secsbeforefs: dd 0
@@ -28,7 +28,7 @@ setup:
         mov ax, 0x07c0
         mov ds, ax
         mov es, ax
-        mov ax, 0x0700
+        mov ax, 0x0c00
         mov ss, ax
     .bootdisk:
         mov [ds:bootdisk], dl
@@ -49,7 +49,7 @@ hang:
     cli
     hlt
 
-filename: db __utf16__('MICROSYS    SYS$')
+filename: db __utf16__('SYSBOOT     SYS$')
 bootdisk: db 0
 
 %include 'include/boot.inc'
@@ -72,6 +72,7 @@ lbatochs:
     .done:
         popa
         mov ch, [.c]
+        shl ch, 2
         mov cl, [.s]
         mov dh, [.h]
         ret
@@ -79,7 +80,7 @@ lbatochs:
     .h: db 0
     .s: db 0
 
-startmsg: db 'Starting MicroSYS $'
+startmsg: db 13, 10, '$'
 
 times 510-($-$$) db 0
 dw 0xaa55

@@ -1,6 +1,7 @@
-entry0_file:
+entry0:
+    .filename: dw __utf16__('SYSBOOT    ')
     .ext: db 'SYS '
-    .flags: dw 0b0000000000001101
+    .flags: db 0b00100101
     .ctime: dw 0
     .cdate: dw 0
     .mtime: dw 0
@@ -8,23 +9,15 @@ entry0_file:
     .cyear: db 0
     .myear: db 0
     .sizelow: dw 8192
-    .firstbet: dw 4
+    .firstbet: dw 0
     .sizemiddle: dw 0
-    .fnentry: dw 1
+    .entrysize: db 48
     .sizehigh: dw 0
-    .entrysize: db 32
-    .reserved: times 5 db 0
-entry0_name:
-    .nextentry: dw 0xffff
-    .order: dw 0
-    .flags: dw 0b0000000000100000
-    .filename0: dw __utf16__('SYSBOOT   ')
-    .sizeentry: db 32
-    .reserved: db 0
-    .filename1: dw __utf16__('  ')
-entry1_file:
+    .reserved: dw 1
+entry1:
+    .filename: dw __utf16__('MICROSYS   ')
     .ext: db '    '
-    .flags: dw 0b0000000000011101
+    .flags: db 0b00110101
     .ctime: dw 0
     .cdate: dw 0
     .mtime: dw 0
@@ -32,19 +25,10 @@ entry1_file:
     .cyear: db 0
     .myear: db 0
     .sizelow: dw 4096
-    .firstbet: dw 20
+    .firstbet: dw 8
     .sizemiddle: dw 0
-    .fnentry: dw 3
+    .entrysize: db 48
     .sizehigh: dw 0
-    .entrysize: db 32
-    .reserved: times 5 db 0
-entry1_name:
-    .nextentry: dw 0xffff
-    .order: dw 0
-    .flags: dw 0b0000000000100000
-    .filename0: dw __utf16__('MICROSYS  ')
-    .sizeentry: db 32
-    .reserved: db 0
-    .filename1: dw __utf16__('  ')
+    .reserved: dw 1
 
-times 4096-($-$$) db 0
+times 6144-($-$$) db 0
