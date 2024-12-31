@@ -13,7 +13,7 @@ entry0:
     .firstbet: dw 0
     .sizemiddle: dw 0
     .sizehigh: dw 0
-    .reserved: dw 1
+    .reserved: dw 0
 entry1:
     .entrysize: db 48
     .filename: dw __utf16__('MICROSYS   ')
@@ -29,6 +29,6 @@ entry1:
     .firstbet: dw 8
     .sizemiddle: dw 0
     .sizehigh: dw 0
-    .reserved: dw 1
+    .reserved: dw 0
 
 times 6144-($-$$) db 0

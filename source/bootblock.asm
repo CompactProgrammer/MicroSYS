@@ -109,7 +109,6 @@ getrootdir:
     mov cx, 0
     mov cl, [ds:sysfs_secsperbet]
     add ax, cx
-    inc ax
     push ax
     mov al, [ds:sysfs_blocksperdir]
     mov bl, [ds:sysfs_secsperblock]
@@ -138,6 +137,9 @@ getentry:
 getblock:
     add si, 0x28
     mov ax, [es:si]
+    mov si, hexword
+    call wordtohexstr
+    call printstr
 
 jmp hang
 
