@@ -62,6 +62,7 @@ hang:
 
 errormsg: db 'Boot error$'
 bootdisk: db 0
+hexword: db 'FFFF$'
 
 %include 'include/boot.inc'
 
@@ -109,17 +110,16 @@ getrootdir:
     mov cl, [ds:sysfs_secsperbet]
     add ax, cx
     inc ax
-    mov dh, [ds:sysfs_secsperbet]
+    push ax
+    mov al, [ds:sysfs_blocksperdir]
+    mov bl, [ds:sysfs_secsperblock]
+    mul bl
+    mov dh, al
+    pop ax
     mov dl, [ds:bootdisk]
     mov bx, 0
     call readsectors
     jc error
-    .view:
-        push ax
-        mov ah, 0x0e
-        mov al, [es:0]
-        int 0x10
-        pop ax
 
 jmp hang
 
