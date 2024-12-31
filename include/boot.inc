@@ -182,6 +182,7 @@ readsectors:
         pop dx
         pop ax
         dec si
+        inc dh
         cmp si, 0
         jne .loop
         stc

@@ -9,7 +9,7 @@ entry0:
     .cyear: db 0
     .myear: db 0
     .sizelow: dw 8192
-    .firstbet: dw 0
+    .firstbet: dw 6
     .sizemiddle: dw 0
     .entrysize: db 48
     .sizehigh: dw 0
@@ -25,7 +25,7 @@ entry1:
     .cyear: db 0
     .myear: db 0
     .sizelow: dw 4096
-    .firstbet: dw 8
+    .firstbet: dw 14
     .sizemiddle: dw 0
     .entrysize: db 48
     .sizehigh: dw 0

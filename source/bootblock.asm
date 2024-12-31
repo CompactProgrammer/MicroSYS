@@ -17,9 +17,8 @@ sysfs_secsbeforefs: dd 0
 sysfs_int13: db 0
 sysfs_drivetype: db 0xf4
 sysfs_serial: db 'MSYS'
-sysfs_betroot: dw 1
-sysfs_bytesperbet: db 3
-sysfs_reserved: times 3 db 0
+sysfs_bytesperbet: db 4
+sysfs_reserved: times 5 db 0
 sysfs_volumelabel:
     .label: dw __utf16__('MICROSYS 0.10   ')
 
@@ -28,7 +27,7 @@ setup:
         mov ax, 0x07c0
         mov ds, ax
         mov es, ax
-        mov ax, 0x0c00
+        mov ax, 0x0e00
         mov ss, ax
     .bootdisk:
         mov [ds:bootdisk], dl
@@ -45,11 +44,23 @@ setup:
         mov si, startmsg
         call printstr
 
+loadbootblock:
+    mov ax, 1
+    mov dh, 1
+    mov dl, [bootdisk]
+    mov bx, 0x200
+    call readsectors
+    jnc bootblockstart
+
+error:
+    mov si, errormsg
+    call printstr
+
 hang:
     cli
     hlt
 
-filename: db __utf16__('SYSBOOT     SYS$')
+errormsg: db 'Boot error$'
 bootdisk: db 0
 
 %include 'include/boot.inc'
@@ -84,5 +95,34 @@ startmsg: db 13, 10, '$'
 
 times 510-($-$$) db 0
 dw 0xaa55
+
+bootblockstart:
+
+segment:
+    mov ax, 0x0a00
+    mov es, ax
+
+getrootdir:
+    mov ax, 0
+    mov al, [ds:sysfs_bootblock]
+    mov cx, 0
+    mov cl, [ds:sysfs_secsperbet]
+    add ax, cx
+    inc ax
+    mov dh, [ds:sysfs_secsperbet]
+    mov dl, [ds:bootdisk]
+    mov bx, 0
+    call readsectors
+    jc error
+    .view:
+        push ax
+        mov ah, 0x0e
+        mov al, [es:0]
+        int 0x10
+        pop ax
+
+jmp hang
+
+filename: db __utf16__('SYSBOOT     SYS$')
 
 times 1024-($-$$) db 0
