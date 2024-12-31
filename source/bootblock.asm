@@ -99,7 +99,7 @@ dw 0xaa55
 
 bootblockstart:
 
-segment:
+segment0:
     mov ax, 0x0a00
     mov es, ax
 
@@ -120,6 +120,24 @@ getrootdir:
     mov bx, 0
     call readsectors
     jc error
+
+getentry:
+    mov si, filename
+    mov di, 0
+    mov cx, 512
+    .loop:
+        call cmpfn_utf16
+        jnc .found
+        mov ax, 0
+        mov al, [es:si]
+        add si, ax
+        loop .loop
+        jmp error
+    .found:
+
+getblock:
+    add si, 0x28
+    mov ax, [es:si]
 
 jmp hang
 

@@ -1,4 +1,5 @@
 entry0:
+    .entrysize: db 48
     .filename: dw __utf16__('SYSBOOT    ')
     .ext: db 'SYS '
     .flags: db 0b00100101
@@ -11,10 +12,10 @@ entry0:
     .sizelow: dw 8192
     .firstbet: dw 6
     .sizemiddle: dw 0
-    .entrysize: db 48
     .sizehigh: dw 0
     .reserved: dw 1
 entry1:
+    .entrysize: db 48
     .filename: dw __utf16__('MICROSYS   ')
     .ext: db '    '
     .flags: db 0b00110101
@@ -27,7 +28,6 @@ entry1:
     .sizelow: dw 4096
     .firstbet: dw 14
     .sizemiddle: dw 0
-    .entrysize: db 48
     .sizehigh: dw 0
     .reserved: dw 1
 
