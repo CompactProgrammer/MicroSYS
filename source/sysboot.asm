@@ -28,12 +28,16 @@ setup:
         mov ds, ax
         mov es, ax
 
+main:
+    mov si, bootmsg
+    call printstr
+
 hang:
     cli
     hlt
 
 bootmsg:
-    .version: db 'MicroSYS Version 0.10 (Build 1381)$'
+    .version: db 'MicroSYS Version 0.10 (Build 0x0001)$'
 
 filenames:
     .config: dw __utf16__('CONFIG      SYS$')
@@ -68,6 +72,6 @@ lbatochs:
     .h: db 0
     .s: db 0
 
-fsinfo: times 0x40 db 0
+fsinfo: times 0x64 db 0
 
 times 8192-($-$$) db 0

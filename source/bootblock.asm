@@ -114,6 +114,7 @@ getrootdir:
     mov bl, [ds:sysfs_secsperblock]
     mul bl
     mov dh, al
+    mov [secsperdir], ax
     pop ax
     mov dl, [ds:bootdisk]
     mov bx, 0
@@ -137,12 +138,49 @@ getentry:
 getblock:
     add si, 0x28
     mov ax, [es:si]
-    mov si, hexword
-    call wordtohexstr
-    call printstr
+    push ax
+
+getbet:
+    mov ax, 0
+    mov al, [ds:sysfs_bootblock]
+    mov dh, [ds:sysfs_secsperbet]
+    mov dl, [ds:bootdisk]
+    mov bx, 0
+    call readsectors
+    jc error
+
+getfilelocation:
+    pop ax
+    mov bx, 0
+    mov bl, [sysfs_secsperblock]
+    mul bx
+    mov bx, 0
+    add bl, [sysfs_bootblock]
+    add ax, bx
+    mov bx, 0
+    add bl, [sysfs_secsperbet]
+    add ax, bx
+    add ax, [secsperdir]
+    mov [fileloc], ax
+
+readfile:
+    mov ax, [fileloc]
+    mov dh, 16
+    mov dl, [bootdisk]
+    mov bx, 0
+    push ax
+    mov ax, 0x0800
+    mov es, ax
+    pop ax
+    call readsectors
+    jc error
+    call lbatochs
+    jmp 0x0800:0
 
 jmp hang
 
 filename: db __utf16__('SYSBOOT     SYS$')
+secsperdir: dw 0
+fileloc: dw 0
 
 times 1024-($-$$) db 0
