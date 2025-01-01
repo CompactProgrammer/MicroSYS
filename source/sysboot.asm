@@ -5,6 +5,7 @@ cpu 186
 jmp setup
 
 %include 'include/boot.inc'
+%include 'include/bootextra.inc'
 
 setup:
     .fsinfo:
@@ -50,6 +51,18 @@ initdevices:
         mov al, 0b11100011
         mov dx, 0
         int 0x14
+        mov si, serialmsg.init
+        call serialoutstr
+        call newline
+    .getconfig:
+        mov si, bootmsg.config
+        call printstr
+        call loadconfig
+        call newline
+    .loadkernel:
+        mov si, bootmsg.kernel
+        call printstr
+        call loadkernel
         call newline
 
 hang:
@@ -59,6 +72,11 @@ hang:
 bootmsg:
     .version: db 'MicroSYS Version 0.10 (Build 0x0001)$'
     .serialinit: db 'Initializing serial ports...$'
+    .config: db 'Processing CONFIG.SYS...$'
+    .kernel: db 'Loading kernel...$'
+
+serialmsg:
+    .init: db 13, 10, '[INFO] Serial port initialized$', 13, 10
 
 filenames:
     .config: dw __utf16__('CONFIG      SYS$')
