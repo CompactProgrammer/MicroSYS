@@ -28,9 +28,29 @@ setup:
         mov ds, ax
         mov es, ax
 
-main:
+bootdelay:
     mov si, bootmsg
     call printstr
+    mov ah, 0x86
+    mov cx, 0x000f
+    mov dx, 0x4240
+    int 0x15
+    call newline
+    mov ah, 0x86
+    mov cx, 0x0007
+    mov dx, 0xa120
+    int 0x15
+    call newline
+
+initdevices:
+    .serial:
+        mov si, bootmsg.serialinit
+        call printstr
+        mov ah, 0x00
+        mov al, 0b11100011
+        mov dx, 0
+        int 0x14
+        call newline
 
 hang:
     cli
@@ -38,6 +58,7 @@ hang:
 
 bootmsg:
     .version: db 'MicroSYS Version 0.10 (Build 0x0001)$'
+    .serialinit: db 'Initializing serial ports...$'
 
 filenames:
     .config: dw __utf16__('CONFIG      SYS$')
