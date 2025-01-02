@@ -76,7 +76,9 @@ bootmsg:
     .kernel: db 'Loading kernel...$'
 
 serialmsg:
-    .init: db 13, 10, '[INFO] Serial port initialized$', 13, 10
+    .init: db 13, 10, '[INFO] Serial port initialized$'
+    .config0: db 13, 10, '[INFO] CONFIG.SYS loaded$'
+    .kernel: db 13, 10, '[INFO] Kernel loaded$'
 
 filenames:
     .config: dw __utf16__('CONFIG      SYS$')
