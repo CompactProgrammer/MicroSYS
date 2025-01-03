@@ -58,11 +58,15 @@ initdevices:
         mov si, bootmsg.config
         call printstr
         call loadconfig
+        mov si, serialmsg.config
+        call serialoutstr
         call newline
     .loadkernel:
         mov si, bootmsg.kernel
         call printstr
         call loadkernel
+        mov si, serialmsg.kernel
+        call serialoutstr
         call newline
 
 hang:
@@ -72,12 +76,12 @@ hang:
 bootmsg:
     .version: db 'MicroSYS Version 0.10 (Build 0x0001)$'
     .serialinit: db 'Initializing serial ports...$'
-    .config: db 'Processing CONFIG.SYS...$'
+    .config: db 'Finding CONFIG.SYS...$'
     .kernel: db 'Loading kernel...$'
 
 serialmsg:
     .init: db 13, 10, '[INFO] Serial port initialized$'
-    .config0: db 13, 10, '[INFO] CONFIG.SYS loaded$'
+    .config: db 13, 10, '[INFO] CONFIG.SYS loaded$'
     .kernel: db 13, 10, '[INFO] Kernel loaded$'
 
 filenames:
