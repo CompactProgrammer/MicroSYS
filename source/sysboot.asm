@@ -54,20 +54,22 @@ initdevices:
         mov si, serialmsg.init
         call serialoutstr
         call newline
-    .getconfig:
-        mov si, bootmsg.config
-        call printstr
-        call loadconfig
-        mov si, serialmsg.config
-        call serialoutstr
-        call newline
-    .loadkernel:
-        mov si, bootmsg.kernel
-        call printstr
-        call loadkernel
-        mov si, serialmsg.kernel
-        call serialoutstr
-        call newline
+
+
+getconfig:
+    mov si, bootmsg.config
+    call printstr
+    call loadconfig
+    mov si, serialmsg.config
+    call serialoutstr
+    call newline
+getkernel:
+    mov si, bootmsg.kernel
+    call printstr
+    call loadkernel
+    mov si, serialmsg.kernel
+    call serialoutstr
+    call newline
 
 hang:
     cli
