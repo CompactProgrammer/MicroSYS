@@ -55,7 +55,6 @@ initdevices:
         call serialoutstr
         call newline
 
-
 getconfig:
     mov si, bootmsg.config
     call printstr
