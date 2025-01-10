@@ -58,21 +58,18 @@ initdevices:
 getconfig:
     mov si, bootmsg.config
     call printstr
-    call loadconfig
+    mov ax, 0x0300
+    mov si, filenames.config
+    call loadfile
     mov si, serialmsg.config
-    call serialoutstr
-    call newline
-getkernel:
-    mov si, bootmsg.kernel
-    call printstr
-    call loadkernel
-    mov si, serialmsg.kernel
     call serialoutstr
     call newline
 
 hang:
     cli
     hlt
+
+bootdisk: db 0
 
 bootmsg:
     .version: db 'MicroSYS Version 0.10 (Build 0x0001)$'
@@ -118,6 +115,23 @@ lbatochs:
     .h: db 0
     .s: db 0
 
-fsinfo: times 0x64 db 0
+fsinfo:
+    .jmpcode: resb 3
+    .signature: resb 1
+    .bytespersec: resb 2
+    .secsperblock: resb 1
+    .bootblock: resb 1
+    .secsinvolume: resb 2
+    .blocksperdir: resb 1
+    .secsperbet: resb 1
+    .secspertrack: resb 2
+    .numofheads: resb 2
+    .secsbeforefs: resb 4
+    .int13: resb 1
+    .drivetype: resb 1
+    .serial: resb 4
+    .bytesperbet: resb 1
+    .reserved: resb 5
+    .volumelabel: resb 32
 
 times 8192-($-$$) db 0
