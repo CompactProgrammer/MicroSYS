@@ -56,20 +56,29 @@ initdevices:
         call newline
 
 getconfig:
+    xchg bx, bx
     mov si, bootmsg.config
     call printstr
     mov ax, 0x0300
     mov si, filenames.config
     call loadfile
+    jc error
     mov si, serialmsg.config
     call serialoutstr
     call newline
+
+jmp hang
+
+error:
+    mov si, errormsg
+    call printstr
 
 hang:
     cli
     hlt
 
 bootdisk: db 0
+errormsg: db 'ERROR$'
 
 bootmsg:
     .version: db 'MicroSYS Version 0.10 (Build 0x0001)$'

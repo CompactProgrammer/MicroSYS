@@ -29,19 +29,6 @@ newline:
     popa
     ret
 
-booterror:
-    .segment:
-        mov ax, 0
-        mov ds, ax
-        mov es, ax
-    .print:
-        mov si, nobootldrmsg
-        call printstr
-    .wait:
-        mov ax, 0
-        int 0x16
-        int 0x19
-
 nobootldrmsg: db 'Boot error, press a key to reboot', 13, 10, '$'
 
 cmpfn_utf16:

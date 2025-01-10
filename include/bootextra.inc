@@ -23,9 +23,15 @@ serialoutstr:
 ; si    pointer to filename
 loadfile:
     clc
+    pusha
     .saveinputs:
         mov [.segmentdst], ax
         mov [.fnpointer], si
+    .savesegments:
+        mov ax, ds
+        mov [.dssave], ax
+        mov ax, es
+        mov [.essave], ax
     .segment:
         mov ax, 0x0a00
         mov es, ax
@@ -54,14 +60,25 @@ loadfile:
             call cmpfn_utf16
             jnc .getentry.found
             mov ax, 0
-            mov al, [es:si]
-            add si, ax
+            mov al, [es:di]
+            add di, ax
             loop .getentry.loop
             jmp .error
         .getentry.found:
+    .getsize:
+        add di, 0x26
+        mov ax, [es:di]
+    .getfilesectors:
+        mov dx, 0
+        mov bx, [ds:fsinfo.bytespersec]
+        div bx
+        cmp dx, 0
+        je .getblock
+        inc ax
+        mov [.filesecs], ax
     .getblock:
-        add si, 0x28
-        mov ax, [es:si]
+        add di, 2
+        mov ax, [es:di]
         push ax
     .getbet:
         mov ax, 0
@@ -70,9 +87,9 @@ loadfile:
         mov dl, [ds:bootdisk]
         mov bx, 0
         call readsectors
+        pop ax
         jc .error
     .getfilelocation:
-        pop ax
         mov bx, 0
         mov bl, [fsinfo.secsperblock]
         mul bx
@@ -86,7 +103,7 @@ loadfile:
         mov [.fileloc], ax
     .readfile:
         mov ax, [.fileloc]
-        mov dh, 16
+        mov dh, [.filesecs+1]
         mov dl, [bootdisk]
         mov bx, 0
         push ax
@@ -97,14 +114,23 @@ loadfile:
         jc .error
         call lbatochs
     .done:
+        clc
+        mov ax, [.dssave]
+        mov ds, ax
+        mov ax, [.essave]
+        mov es, ax
         popa
         ret
     .error:
         stc
-        jmp .done
+        popa
+        ret
     .segmentdst:
         resb 2
     .fnpointer:
         resb 2
     .secsperdir: resb 2
     .fileloc: resb 2
+    .filesecs: resb 2
+    .dssave: resb 2
+    .essave: resb 2

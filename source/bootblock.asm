@@ -129,15 +129,15 @@ getentry:
         call cmpfn_utf16
         jnc .found
         mov ax, 0
-        mov al, [es:si]
-        add si, ax
+        mov al, [es:di]
+        add di, ax
         loop .loop
         jmp error
     .found:
 
 getblock:
-    add si, 0x28
-    mov ax, [es:si]
+    add di, 0x28
+    mov ax, [es:di]
     push ax
 
 getbet:
@@ -178,6 +178,19 @@ readfile:
     jmp 0x0800:0
 
 jmp hang
+
+booterror:
+    .segment:
+        mov ax, 0
+        mov ds, ax
+        mov es, ax
+    .print:
+        mov si, nobootldrmsg
+        call printstr
+    .wait:
+        mov ax, 0
+        int 0x16
+        int 0x19
 
 filename: db __utf16__('SYSBOOT     SYS$')
 secsperdir: dw 0

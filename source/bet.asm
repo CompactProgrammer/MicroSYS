@@ -24,4 +24,9 @@ sysboot:
         db 0x01, 0x00
         dw 0xffff
 
+config:
+    .0:
+        db 0x01, 0x00
+        dw 0xffff
+
 times 6144-($-$$) db 0
