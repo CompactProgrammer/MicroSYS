@@ -12,11 +12,8 @@ nasm 'source/syskernel.asm' -f bin -o 'build/syskernel.bin';
 # Device drivers
 nasm 'source/keyboard.asm' -f bin -o 'build/keyboard.bin';
 
-# Other files
-nasm 'source/config.asm' -f bin -o 'build/config.bin';
-
 # Combine binaries
-cat 'build/bootblock.bin' 'build/bet.bin' 'build/rootdir.bin' 'build/sysboot.bin' 'build/syskernel.bin' 'build/config.bin' 'build/keyboard.bin' > 'images/disk1.img';
+cat 'build/bootblock.bin' 'build/bet.bin' 'build/rootdir.bin' 'build/sysboot.bin' 'build/syskernel.bin' 'build/keyboard.bin' > 'images/disk1.img';
 
 # Convert to floppy disk image
 python 'fdiskimg.py';

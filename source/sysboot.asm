@@ -55,17 +55,19 @@ initdevices:
         call serialoutstr
         call newline
 
-getconfig:
+getkernel:
     xchg bx, bx
-    mov si, bootmsg.config
+    mov si, bootmsg.kernel
     call printstr
-    mov ax, 0x0300
-    mov si, filenames.config
+    mov ax, 0x0100
+    mov si, filenames.kernel
     call loadfile
     jc error
-    mov si, serialmsg.config
+    xchg bx, bx
+    mov si, serialmsg.kernel
     call serialoutstr
-    call newline
+    xchg bx, bx
+    jmp 0x0100:0
 
 jmp hang
 
@@ -101,13 +103,13 @@ filenames:
 lbatochs:
     pusha
     .sec:
-        mov bx, [fsinfo+0x0c]
+        mov bx, [fsinfo.secspertrack]
         mov dx, 0
         div bx
         inc dx
         mov [.s], dl
     .cyl:
-        mov bx, [fsinfo+0x0e]
+        mov bx, [fsinfo.numofheads]
         mov dx, 0
         div bx
         mov [.c], al
@@ -124,6 +126,7 @@ lbatochs:
     .h: db 0
     .s: db 0
 
+fsinfostartfordebugger: db 'FSINFO'
 fsinfo:
     .jmpcode: resb 3
     .signature: resb 1
