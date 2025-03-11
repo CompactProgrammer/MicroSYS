@@ -29,50 +29,6 @@ newline:
     popa
     ret
 
-nobootldrmsg: db 'Boot error, press a key to reboot', 13, 10, '$'
-
-cmpfn_utf16:
-    clc
-    pusha
-    .loop:
-        mov ax, [ds:si]
-        mov bx, [es:di]
-        cmp ax, __utf16__('$')
-        jmp .done
-        cmp bx, __utf16__('$')
-        jmp .done
-        cmp ax, bx
-        jne .noequ
-        add si, 2
-        add di, 2
-        jmp .loop
-    .noequ:
-        stc
-    .done:
-        popa
-        ret
-
-cmpfn_utf8:
-    clc
-    pusha
-    .loop:
-        mov ah, [ds:si]
-        mov al, [es:di]
-        cmp ah, '$'
-        jmp .done
-        cmp al, '$'
-        jmp .done
-        cmp ah, al
-        jne .noequ
-        inc si
-        inc di
-        jmp .loop
-    .noequ:
-        stc
-    .done:
-        popa
-        ret
-
 printfn:
     pusha
     mov ah, 0x0e
@@ -147,38 +103,21 @@ wordtohexstr:
         popa
         ret
 
-; INPUT
-; ax    LBA sector
-; es:bx pointer to buffer
-; dh    sectors to read
-; dl    drive number
-readsectors:
+serialoutstr:
     clc
     pusha
-    mov si, 10
+    mov dx, 0
     .loop:
-        dec dh
-        push ax
-        push dx
-        call lbatochs
-        mov ah, 2
-        mov al, 1
-        int 0x13
-        jc .error
-        pop dx
-        pop ax
-        cmp dh, 0
+        mov ah, 1
+        mov al, [ds:si]
+        cmp al, '$'
         je .done
-        inc ax
-        add bx, 0x200
+        int 0x14
+        test ah, 0b00000001
+        jnz .error
+        inc si
         jmp .loop
     .error:
-        pop dx
-        pop ax
-        dec si
-        inc dh
-        cmp si, 0
-        jne .loop
         stc
     .done:
         popa

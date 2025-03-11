@@ -11,7 +11,7 @@ entry0:
     .interleave: db 0
     .volseqnum0: dw 0x0001 ; 1
     .volseqnum1: dw 0x0100
-    .namelen: db 1
+    .namelen: db 10
     .name: db 'BOOT.SYS'
     .fileid: db 59, '1'
     .padding: db 0

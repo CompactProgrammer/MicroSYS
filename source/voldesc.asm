@@ -21,8 +21,22 @@ primarydesc:
     .loptpathtable: dd 0
     .mpathtable: dd 0
     .moptpathtable: dd 0
-    .rootdir: times 34 db 0
-    .volsetid: times 128 db 0
+    .rootdir:
+        .rootdir.length: db 34
+        .rootdir.attrlen: db 0
+        .rootdir.extloc0: dd 0x00000017 ; 23
+        .rootdir.extloc1: dd 0x17000000
+        .rootdir.datlen0: dd 0x00000800 ; 2048
+        .rootdir.datlen1: dd 0x00000008
+        .rootdir.recdate: times 7 db 0
+        .rootdir.fileflags: db 0b00000000
+        .rootdir.unitssize: db 0
+        .rootdir.interleave: db 0
+        .rootdir.volseqnum0: dw 0x0001 ; 1
+        .rootdir.volseqnum1: dw 0x0100
+        .rootdir.namelen: db 1
+        .rootdir.padding: db 0
+    .volsetid: times 128 db 0x20
     .pubid: times 128 db 0x20
     .prepid: times 128 db 0x20
     .appid: times 128 db 0x20
@@ -43,6 +57,7 @@ bootrecord:
     .version: db 1
     .systid: db 'EL TORITO SPECIFICATION         '
     .bootid: times 32 db 0
+    .bootcat: dd 19
 times (2048*2)-($-$$) db 0
 terminate:
     .type: db 255

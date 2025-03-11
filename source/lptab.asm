@@ -1,8 +1,8 @@
-pathtableentry0:
-    .length: db 0
+tabentry0:
+    .length: db 10
     .attrlen: db 0
-    .extloc: dd 0
+    .extloc: dd 0x00000017 ; 23
     .parentdir: dw 0
-    .name: db 'ROOT    '
+    .name: dw 0
 
 times 4096-($-$$) db 0
