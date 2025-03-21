@@ -1,18 +1,38 @@
+%define swap_word(x) (((x) >> 8) | ((x) << 8))
+%define swap_dword(x) (((x) >> 24) | (((x) >> 8) & 0x0000FF00) | (((x) << 8) & 0x00FF0000) | ((x) << 24))
+
 entry0:
     .length: db 44
     .attrlen: db 0
-    .extloc0: dd 0
-    .extloc1: dd 0
-    .datlen0: dd 0x00002000 ; 8192
-    .datlen1: dd 0x00000020
+    .extloc0: dd 25
+    .extloc1: dd swap_dword(25)
+    .datlen0: dd 8192
+    .datlen1: dd swap_dword(8192)
     .recdate: times 7 db 0
     .fileflags: db 0b00000000
     .unitssize: db 0
     .interleave: db 0
-    .volseqnum0: dw 0x0001 ; 1
-    .volseqnum1: dw 0x0100
+    .volseqnum0: dw 1
+    .volseqnum1: dw swap_word(1)
     .namelen: db 10
     .name: db 'BOOT.SYS'
+    .fileid: db 59, '1'
+    .padding: db 0
+entry1:
+    .length: db 44
+    .attrlen: db 0
+    .extloc0: dd 29
+    .extloc1: dd swap_dword(29)
+    .datlen0: dd 2048
+    .datlen1: dd swap_dword(2048)
+    .recdate: times 7 db 0
+    .fileflags: db 0b00000010
+    .unitssize: db 0
+    .interleave: db 0
+    .volseqnum0: dw 1
+    .volseqnum1: dw swap_word(1)
+    .namelen: db 10
+    .name: db 'MICROSYS'
     .fileid: db 59, '1'
     .padding: db 0
 

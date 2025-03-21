@@ -1,39 +1,42 @@
+%define swap_word(x) (((x) >> 8) | ((x) << 8))
+%define swap_dword(x) (((x) >> 24) | (((x) >> 8) & 0x0000FF00) | (((x) << 8) & 0x00FF0000) | ((x) << 24))
+
 primarydesc:
     .type: db 1
     .id: db 'CD001'
     .version: db 1
     .unused0: db 0
-    .sysid: db 'LINUX                           '
+    .sysid: db '                                '
     .volid: db 'MicroSYS 0.10                   '
     .unused1: times 8 db 0
-    .volsize0: dd 0x00001620 ; 5664
-    .volsize1: dd 0x20160000
+    .volsize0: dd 3072
+    .volsize1: dd swap_dword(3072) ; 6MB
     .unused2: times 32 db 0
-    .volsetsize0: dw 0x0001 ; 1
-    .volsetsize1: dw 0x0100
-    .volseqnum0: dw 0x0001 ; 1
-    .volseqnum1: dw 0x0100
-    .blocksize0: dw 0x0800 ; 2048
-    .blocksize1: dw 0x0008
-    .pathsize0: dw 0x1000 ; 4096
-    .pathsize1: dw 0x0001
-    .lpathtable: dd 0
+    .volsetsize0: dw 1
+    .volsetsize1: dw swap_word(1)
+    .volseqnum0: dw 1
+    .volseqnum1: dw swap_word(1)
+    .blocksize0: dw 2048
+    .blocksize1: dw swap_word(2048)
+    .pathsize0: dw 4096
+    .pathsize1: dw swap_word(4096)
+    .lpathtable: dd 20
     .loptpathtable: dd 0
-    .mpathtable: dd 0
-    .moptpathtable: dd 0
+    .mpathtable: dd swap_dword(22)
+    .moptpathtable: dd swap_dword(0)
     .rootdir:
         .rootdir.length: db 34
         .rootdir.attrlen: db 0
-        .rootdir.extloc0: dd 0x00000017 ; 23
-        .rootdir.extloc1: dd 0x17000000
-        .rootdir.datlen0: dd 0x00000800 ; 2048
-        .rootdir.datlen1: dd 0x00000008
+        .rootdir.extloc0: dd 24
+        .rootdir.extloc1: dd swap_dword(24)
+        .rootdir.datlen0: dd 2048
+        .rootdir.datlen1: dd swap_dword(2048)
         .rootdir.recdate: times 7 db 0
-        .rootdir.fileflags: db 0b00000000
+        .rootdir.fileflags: db 0b00000010
         .rootdir.unitssize: db 0
         .rootdir.interleave: db 0
-        .rootdir.volseqnum0: dw 0x0001 ; 1
-        .rootdir.volseqnum1: dw 0x0100
+        .rootdir.volseqnum0: dw 1
+        .rootdir.volseqnum1: dw swap_word(1)
         .rootdir.namelen: db 1
         .rootdir.padding: db 0
     .volsetid: times 128 db 0x20
