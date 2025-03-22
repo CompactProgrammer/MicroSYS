@@ -29,14 +29,14 @@ entry2:
     .length: db 46
     .attrlen: db 0
     .extloc: dd 27, swap_dword(27)
-    .datlen: dd 4096, swap_dword(4096)
+    .datlen: dd 8192, swap_dword(8192)
     .recdate: times 7 db 0
     .fileflags: db 0b00000000
     .unitssize: db 0
     .interleave: db 0
     .volseqnum: dw 1, swap_word(1)
     .namelen: db 12
-    .name: db 'SYSLDR.SYS'
+    .name: db 'SYSKNL.SYS'
     .fileid: db 59, '1'
     .padding: db 0
 
