@@ -11,7 +11,7 @@ tabentry0:
 tabentry1:
     .namelen: db 8
     .attrlen: db 0
-    .extloc: dd swap_dword(24)
+    .extloc: dd swap_dword(25)
     .parentdir: dw 1
     .name: db 'MICROSYS'
 

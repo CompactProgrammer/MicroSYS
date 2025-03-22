@@ -11,8 +11,9 @@ entry0:
         .default.media: db 0
         .default.segment: dw 0
         .default.systype: db 0
-        .default.reserved: db 0
+        .default.reserved0: db 0
         .default.sectors: dw 4
-        .default.rba: dd 0
+        .default.rba: dd 26
+        .default.reserved1: times 20 db 0
 
 times 2048-($-$$) db 0

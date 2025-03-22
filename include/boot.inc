@@ -29,22 +29,6 @@ newline:
     popa
     ret
 
-printfn:
-    pusha
-    mov ah, 0x0e
-    mov cl, 14
-    .loop:
-        dec cl
-        mov al, [ds:si]
-        int 0x10
-        cmp cl, 0
-        je .done
-        inc si
-        jmp .loop
-    .done:
-        popa
-        ret
-
 ; INPUT
 ; al    nibble to convert (low 4 bits)
 ; si    pointer to buffer
