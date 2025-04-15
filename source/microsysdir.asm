@@ -28,6 +28,19 @@ entry1:
 entry2:
     .length: db 46
     .attrlen: db 0
+    .extloc: dd 31, swap_dword(31)
+    .datlen: dd 2048, swap_dword(2048)
+    .recdate: times 7 db 0
+    .fileflags: db 0b00000000
+    .unitssize: db 0
+    .interleave: db 0
+    .volseqnum: dw 1, swap_word(1)
+    .namelen: db 13
+    .name: db 'BOOTCFG.SYS'
+    .fileid: db 59, '1'
+entry3:
+    .length: db 46
+    .attrlen: db 0
     .extloc: dd 27, swap_dword(27)
     .datlen: dd 8192, swap_dword(8192)
     .recdate: times 7 db 0

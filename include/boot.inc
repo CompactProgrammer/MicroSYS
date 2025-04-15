@@ -10,7 +10,7 @@ printstr:
     mov ah, 0x0e
     .loop:
         mov al, [ds:si]
-        cmp al, '$'
+        cmp al, 0
         je .done
         int 0x10
         inc si
@@ -28,6 +28,28 @@ newline:
     int 0x10
     popa
     ret
+
+; INPUT
+; si    pointer to filename 1
+; di    pointer to filename 2
+cmpfn:
+    clc
+    pusha
+    .loop:
+        mov ah, [si]
+        mov al, [di]
+        cmp ah, 0
+        je .done
+        cmp ah, al
+        jne .notfound
+        inc si
+        inc di
+        jmp .loop
+    .notfound:
+        stc
+    .done:
+        popa
+        ret
 
 ; INPUT
 ; al    nibble to convert (low 4 bits)
@@ -87,6 +109,20 @@ wordtohexstr:
         popa
         ret
 
+serialoutchar:
+    clc
+    pusha
+    mov dx, 0
+    mov ah, 1
+    int 0x14
+    test ah, 0x80
+    jz .done
+    .error:
+        stc
+    .done:
+        popa
+        ret
+
 serialoutstr:
     clc
     pusha
@@ -94,13 +130,60 @@ serialoutstr:
     .loop:
         mov ah, 1
         mov al, [ds:si]
-        cmp al, '$'
+        cmp al, 0
         je .done
         int 0x14
-        test ah, 0b00000001
+        test ah, 0x80
         jnz .error
         inc si
         jmp .loop
+    .error:
+        stc
+    .done:
+        popa
+        ret
+
+db 'DAP'
+diskaddrpack:
+    .size: db 0x10
+    .unused: db 0
+    .sectors: dw 1
+    .offset: dw 0x8000
+    .segment: dw 0
+    .start0: dd 16
+    .start1: dd 0
+
+; INPUT
+; ax    start sector
+; cx    number of sectors
+; dl    drive number
+; es:bx pointer to buffer
+readsectors:
+    clc
+    pusha
+    .dap:
+        mov di, diskaddrpack.sectors
+        mov [di], cx
+        add di, 2
+        mov [di], bx
+        add di, 2
+        push ax
+        mov ax, es
+        mov [di], ax
+        pop ax
+        add di, 2
+        mov [di], ax
+        add di, 2
+        mov word[di], 0
+        add di, 2
+        mov word[di], 0
+        add di, 2
+        mov word[di], 0
+    .read:
+        mov ah, 0x42
+        mov si, diskaddrpack
+        int 0x13
+        jnc .done
     .error:
         stc
     .done:
