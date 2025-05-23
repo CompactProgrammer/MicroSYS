@@ -1,6 +1,6 @@
 org 0x7c00
 bits 16
-cpu 186
+cpu 386
 
 jmp setup
 %include 'include/boot.inc'
@@ -39,6 +39,8 @@ setup:
         call newline
         mov si, 0x8373
         call printstr
+        mov si, startupmsg
+        call printstr
 
 main:
     .getrootdir:
@@ -60,44 +62,9 @@ main:
         mov bx, 0x8000
         call readsectors
         jc error
-    .findfolder:
-        mov cx, 60
-        mov si, dirname
-        mov di, 0x8000
-        .findfolder.loop:
-            dec cx
-            add di, 33
-            call cmpfn
-            jnc .findfolder.found
-            cmp cx, 0
-            je knlnotfound
-            sub di, 33
-            mov ah, 0
-            mov al, [di]
-            add di, ax
-            jmp .findfolder.loop
-        .findfolder.found:
-            sub di, 23
-            mov ax, [di]
-            mov dx, 0
-            mov bx, 2048
-            div bx
-            cmp dx, 0
-            je .findfolder.found.nocarry
-            inc ax
-            .findfolder.found.nocarry:
-            mov cx, ax
-            sub di, 8
-            mov ax, [di]
-            mov dl, [bootdisk]
-            mov bx, 0
-            mov es, bx
-            mov bx, 0x8000
-            call readsectors
-            jc error
     .findfile:
         mov cx, 60
-        mov si, filename
+        mov si, knlfilename
         mov di, 0x8000
         .findfile.loop:
             dec cx
@@ -132,7 +99,7 @@ main:
             jc error
     .jump:
         mov dl, [bootdisk]
-        jmp 0x0100:0
+        jmp 0:0x1000
 
 jmp hang
 
@@ -152,9 +119,9 @@ hang:
     hlt
 
 bootdisk: db 0
-dirname: db 'MICROSYS', 0
-filename: db 'SYSKNL.SYS', 59, '1', 0
+knlfilename: db 'SYSKNL.SYS', 59, '1', 0
 
+startupmsg: db 13, 10, 'Starting MicroSYS...', 0
 outdatedmsg: db 13, 10, 'Outdated BIOS, MicroSYS will not run', 0
 booterrmsg: db 13, 10, 'Boot error, reboot to try again', 0
 knlnotfoundmsg: db 13, 10, 'Kernel not found, reboot to try again', 0

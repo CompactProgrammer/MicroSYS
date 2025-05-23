@@ -1,3 +1,10 @@
+printchar:
+    pusha
+    mov ah, 0x0e
+    int 0x10
+    popa
+    ret
+    
 printstr:
     pusha
     mov ah, 0x0e
@@ -24,9 +31,8 @@ newline:
 
 cls:
     pusha
-    mov ah, 0x0f
-    int 0x10
-    mov ah, 0x0e
+    mov ah, 0
+    mov al, 3
     int 0x10
     popa
     ret

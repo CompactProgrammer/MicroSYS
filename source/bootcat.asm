@@ -13,7 +13,7 @@ entry0:
         .default.systype: db 0
         .default.reserved0: db 0
         .default.sectors: dw 4
-        .default.rba: dd 26
+        .default.rba: dd 25
         .default.reserved1: times 20 db 0
 
 times 2048-($-$$) db 0

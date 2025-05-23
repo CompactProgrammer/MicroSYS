@@ -28,7 +28,7 @@ entry1:
 entry2:
     .length: db 44
     .attrlen: db 0
-    .extloc: dd 26, swap_dword(26)
+    .extloc: dd 25, swap_dword(25)
     .datlen: dd 2048, swap_dword(2048)
     .recdate: times 7 db 0
     .fileflags: db 0b00000000
@@ -40,17 +40,18 @@ entry2:
     .fileid: db 59, '1'
     .padding: db 0
 entry3:
-    .length: db 42
+    .length: db 46
     .attrlen: db 0
-    .extloc: dd 25, swap_dword(25)
-    .datlen: dd 2048, swap_dword(2048)
+    .extloc: dd 26, swap_dword(26)
+    .datlen: dd 8192, swap_dword(8192)
     .recdate: times 7 db 0
-    .fileflags: db 0b00000010
+    .fileflags: db 0b00000000
     .unitssize: db 0
     .interleave: db 0
     .volseqnum: dw 1, swap_word(1)
-    .namelen: db 8
-    .name: db 'MICROSYS'
+    .namelen: db 12
+    .name: db 'SYSKNL.SYS'
+    .fileid: db 59, '1'
     .padding: db 0
 
 times (2048*1)-($-$$) db 0
