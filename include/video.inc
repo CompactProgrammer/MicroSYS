@@ -10,7 +10,7 @@ printstr:
     mov ah, 0x0e
     .loop:
         mov al, [ds:si]
-        cmp al, '$'
+        cmp al, 0
         je .done
         int 0x10
         inc si

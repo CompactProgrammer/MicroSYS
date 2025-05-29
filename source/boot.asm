@@ -17,22 +17,17 @@ setup:
         mov bp, 0
     .bootdisk:
         mov [bootdisk], dl
-    .extcheck:
-        mov ah, 0x41
-        mov bx, 0x55aa
-        int 0x13
-        jc outdatedbios
     .serial:
         mov ah, 0
         mov al, 0b11100011
         mov dx, 0
         int 0x14
     .version:
+        mov ax, 0
+        mov es, ax
         mov ax, 16
         mov cx, 1
         mov dl, [bootdisk]
-        mov bx, 0
-        mov es, bx
         mov bx, 0x8000
         call readsectors
         jc error
