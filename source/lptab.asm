@@ -1,5 +1,5 @@
 tabentry0:
-    .namelen: db 1
+    .namelen: db 2
     .attrlen: db 0
     .extloc: dd 24
     .parentdir: dw 1
@@ -8,7 +8,7 @@ tabentry0:
 tabentry1:
     .namelen: db 8
     .attrlen: db 0
-    .extloc: dd 25
+    .extloc: dd 30
     .parentdir: dw 1
     .name: db 'MICROSYS'
 

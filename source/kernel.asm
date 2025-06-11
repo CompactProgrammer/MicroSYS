@@ -7,42 +7,6 @@ db 'KERNEL'
 %include 'include/video.inc'
 %include 'include/disk.inc'
 
-redrawtop:
-    pusha
-    mov ax, es
-    push ax
-    mov ax, 0xb800
-    mov es, ax
-    .prep0:
-        mov cx, 0
-        mov si, toptext
-        mov di, 0
-    .loop0:
-        inc cx
-        cmp cx, 81
-        je .select
-        mov al, [ds:si]
-        mov [es:di], al
-        inc di
-        mov al, 0b01110000
-        mov [es:di], al
-        inc di
-        inc si
-        jmp .loop0
-    .select:
-        mov ah, 2
-        mov bh, 0
-        mov dl, 3
-        mov dh, 2
-        int 0x10
-        mov si, toptext.3
-        call printstr
-    .done:
-        pop ax
-        mov es, ax
-        popa
-        ret
-
 setup:
     .segments:
         mov ax, 0x0100
@@ -51,106 +15,68 @@ setup:
         mov es, ax
     .bootdisk:
         mov [ds:bootdisk], dl
-    .topbar:
+    .clearscreen:
         call cls
-        call redrawtop
-    .currentdirset:
-        mov al, 0
-        mov si, currentdirlen
-        mov [ds:si], al
-        inc si
-        mov [ds:si], al
-    .version:
-        mov ax, 16
-        mov cx, 1
-        mov dl, [ds:bootdisk]
-        mov bx, 0
-        call readsectors
-        jc error
-    .getrootdir:
-        mov si, 0xa6
-        mov ax, [es:si]
-        mov dx, 0
-        mov bx, 2048
-        div bx
-        cmp dx, 0
-        je .getrootdir.nocarry
-        inc ax
-        .getrootdir.nocarry:
-        mov cx, ax
-        mov si, 0x9e
-        mov ax, [es:si]
-        mov dl, [ds:bootdisk]
-        mov bx, 0x800
-        call readsectors
-        jc error
-
-main:
-    .setupcursor:
-        mov ah, 2
-        mov bh, 0
-        mov dl, 6
-        mov dh, 4
-        int 0x10
+    .loadivt:
+        push es
+        mov ax, 0
+        mov es, ax
+        mov bx, 0x0100
+        mov ax, sysfuncs
+        mov [es:(0x40*4)], ax
+        mov [es:(0x40*4)+2], bx
+        mov ax, devloadunload
+        mov [es:(0x41*4)], ax
+        mov [es:(0x41*4)+2], bx
+        mov ax, devaccess
+        mov [es:(0x4f*4)], ax
+        mov [es:(0x4f*4)+2], bx
 
 jmp hang
 
 error:
-    mov ah, 2
-    mov bh, 0
-    mov dl, 21
-    mov dh, 10
+    mov ah, 0
+    mov al, 3
     int 0x10
-    mov si, errormsg.1
-    call printstr
-    mov dh, 11
-    int 0x10
-    mov si, errormsg.2
-    call printstr
-    mov dh, 12
-    int 0x10
-    call printstr
-    mov dh, 13
-    int 0x10
-    call printstr
-    mov dh, 14
-    int 0x10
-    mov si, errormsg.3
-    call printstr
-    mov dl, 23
-    mov dh, 12
-    int 0x10
+    mov ax, 0x0100
+    mov ds, ax
     mov si, errormsg.0
     call printstr
-    mov dh, 25
-    int 0x10
+    mov si, errormsg.1
+    call printstr
+    mov ax, 0
+    int 0x16
+    jmp 0xffff:0
 hang:
     cli
     hlt
 
-bootdisk: db 0
-toptext:
-    .0: db 'MicroSYS File Manager'
-    .1: times 37 db 0
-    .2: db 'Press ALT to show menu'
-    .3: db 'Use ', 24, ' and ', 25, ' to navigate, and ENTER to select', 0
+devaccess:
+    iret
 
-currentdirlen: db 0 ; set to 0 if root directory
-currentdir: db 0
+devloadunload:
+    iret
+
+sysfuncs:
+    iret
+
+bootdisk: db 0
 
 errormsg:
-    .0: db 'MicroSYS has encountered an error', 0
-    .1:
-        db 201
-        times 35 db 205
-        db 187, 0
-    .2:
-        db 186
-        times 35 db ' '
-        db 186, 0
-    .3:
-        db 200
-        times 35 db 205
-        db 188, 0
+    .0: db 'MicroSYS has encountered a fatal error. Information is below:', 13, 10, 13, 10, 0
+    .1: db 13, 10, 13, 10, 'Press any key to reboot.', 0
+    .error00: db '0x00: INVALID OPCODE', 0
+    .error01: db '0x01: DIVIDE BY ZERO', 0
+    .error02: db '0x02: NMI', 0
+    .errorff: db '0xff: UNDEFINED ERROR', 0
+    .location0: db 13, 10, 'Memory location of error: ', 0
+    .location1: db '0000:', 0
+    .location2: db '0000', 0
+    .stack0: db 13, 10, 'Current stack pointer: ', 0
+    .stack1: db '0000:', 0
+    .stack2: db '0000', 0
 
-times 8192-($-$$) db 0
+currentdirlen: db 0 ; set to 0 if root directory
+currentdir: times 16 db 0
+
+times 16384-($-$$) db 0

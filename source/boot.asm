@@ -92,9 +92,11 @@ main:
             mov bx, 0x1000
             call readsectors
             jc error
-    .jump:
+    .callkernel:
         mov dl, [bootdisk]
-        jmp 0:0x1000
+        call 0x0100:0
+
+loadconfigfile:
 
 jmp hang
 
