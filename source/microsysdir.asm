@@ -4,7 +4,7 @@
 entry0:
     .length: db 34
     .attrlen: db 0
-    .extloc: dd 30, swap_dword(30)
+    .extloc: dd 34, swap_dword(34)
     .datlen: dd 2048, swap_dword(2048)
     .recdate: times 7 db 0
     .fileflags: db 0b00000010
@@ -28,7 +28,7 @@ entry1:
 entry2:
     .length: db 46
     .attrlen: db 0
-    .extloc: dd 31, swap_dword(31)
+    .extloc: dd 35, swap_dword(35)
     .datlen: dd 2048, swap_dword(2048)
     .recdate: times 7 db 0
     .fileflags: db 0b00000000
@@ -42,7 +42,7 @@ entry2:
 entry3:
     .length: db 46
     .attrlen: db 0
-    .extloc: dd 32, swap_dword(32)
+    .extloc: dd 36, swap_dword(36)
     .datlen: dd 2048, swap_dword(2048)
     .recdate: times 7 db 0
     .fileflags: db 0b00000000

@@ -31,8 +31,12 @@ setup:
         mov ax, devaccess
         mov [es:(0x4f*4)], ax
         mov [es:(0x4f*4)+2], bx
-
-jmp hang
+        mov ax, reboot
+        mov [es:(0x19*4)], ax
+        mov [es:(0x19*4)+2], bx
+        pop es
+    .done:
+        ret
 
 error:
     mov ah, 0
@@ -40,9 +44,7 @@ error:
     int 0x10
     mov ax, 0x0100
     mov ds, ax
-    mov si, errormsg.0
-    call printstr
-    mov si, errormsg.1
+    mov si, errormsg
     call printstr
     mov ax, 0
     int 0x16
@@ -50,6 +52,15 @@ error:
 hang:
     cli
     hlt
+
+reboot:
+    pop ax
+    pop ax
+    mov ax, 0xffff
+    push ax
+    mov ax, 0
+    push ax
+    iret
 
 devaccess:
     iret
@@ -61,22 +72,133 @@ sysfuncs:
     iret
 
 bootdisk: db 0
+defaultdisk: db 0
+errormsg: db 'MicroSYS has encountered a fatal error. Press any key to reboot.', 0
 
-errormsg:
-    .0: db 'MicroSYS has encountered a fatal error. Information is below:', 13, 10, 13, 10, 0
-    .1: db 13, 10, 13, 10, 'Press any key to reboot.', 0
-    .error00: db '0x00: INVALID OPCODE', 0
-    .error01: db '0x01: DIVIDE BY ZERO', 0
-    .error02: db '0x02: NMI', 0
-    .errorff: db '0xff: UNDEFINED ERROR', 0
-    .location0: db 13, 10, 'Memory location of error: ', 0
-    .location1: db '0000:', 0
-    .location2: db '0000', 0
-    .stack0: db 13, 10, 'Current stack pointer: ', 0
-    .stack1: db '0000:', 0
-    .stack2: db '0000', 0
+functerm:
+    iret
 
-currentdirlen: db 0 ; set to 0 if root directory
-currentdir: times 16 db 0
+funcgetdefdisk:
+    mov ah, [defaultdisk]
+    iret
+
+funcsetdefdisk:
+    mov [defaultdisk], al
+    iret
+
+funcintvector:
+    pusha
+    push ds
+    push ax
+    mov ax, 0
+    mov ds, ax
+    .getaddr:
+        pop ax
+        mov ah, 0
+        mov dx, 4
+        mul dx
+        mov si, ax
+    .setint:
+        mov [ds:si], cx
+        add si, 2
+        mov [ds:si], bx
+    .done:
+        pop ax
+        mov ds, ax
+        popa
+        iret
+
+funcversion:
+    mov ah, '0'
+    mov al, '1'
+    iret
+
+functermstayres:
+    iret
+
+funcdrvinfo:
+    iret
+
+funcbootdrv:
+    mov al, [bootdisk]
+    iret
+
+funcfreeclus:
+    iret
+
+funcprgm:
+    iret
+
+funcallocmem:
+    iret
+
+funcfreemem:
+    iret
+
+funcresizemem:
+    iret
+
+funcexcode:
+    iret
+
+funcgetcd:
+    iret
+
+funcsetcd:
+    iret
+
+funcfilecreate:
+    iret
+
+funcfileopen:
+    iret
+
+funcfileclose:
+    iret
+
+funcfilegetpointer:
+    iret
+
+funcfilesetpointer:
+    iret
+
+funcfileread:
+    iret
+
+funcfilewrite:
+    iret
+
+funcfiledelete:
+    iret
+
+funcfilemov:
+    iret
+
+funcfilecopy:
+    iret
+
+funcfilegetattr:
+    iret
+
+funcfilesetattr:
+    iret
+
+funcfileren:
+    iret
+
+funcfilesize:
+    iret
+
+funcfilectime:
+    iret
+
+funcfilemtime:
+    iret
+
+MAXDRVENTR equ 24
+drvtablen: db 20*MAXDRVENTR
+drivertable: times (20*MAXDRVENTR) db 0
+
+currentdir: times 512 db 0
 
 times 16384-($-$$) db 0

@@ -30,7 +30,7 @@ primarydesc:
         .rootdir.interleave: db 0
         .rootdir.volseqnum: dw 1, swap_word(1)
         .rootdir.namelen: db 1
-        .rootdir.padding: db 0
+        .rootdir.name: db 0
     .volsetid:
         db 'MICROSYS'
         times 120 db ' '

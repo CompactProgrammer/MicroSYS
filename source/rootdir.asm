@@ -12,7 +12,7 @@ entry0:
     .interleave: db 0
     .volseqnum: dw 1, swap_word(1)
     .namelen: db 1
-    .padding: db 0
+    .name: db 0
 entry1:
     .length: db 34
     .attrlen: db 0
@@ -35,7 +35,7 @@ entry2:
     .unitssize: db 0
     .interleave: db 0
     .volseqnum: dw 1, swap_word(1)
-    .namelen: db 10
+    .namelen: db 8
     .name: db 'BOOT.SYS'
     .fileid: db 59, '1'
     .padding: db 0
@@ -43,20 +43,20 @@ entry3:
     .length: db 46
     .attrlen: db 0
     .extloc: dd 26, swap_dword(26)
-    .datlen: dd 8192, swap_dword(8192)
+    .datlen: dd 16384, swap_dword(16384)
     .recdate: times 7 db 0
     .fileflags: db 0b00000000
     .unitssize: db 0
     .interleave: db 0
     .volseqnum: dw 1, swap_word(1)
-    .namelen: db 12
+    .namelen: db 10
     .name: db 'SYSKNL.SYS'
     .fileid: db 59, '1'
     .padding: db 0
 entry4:
-    .length: db 42
+    .length: db 44
     .attrlen: db 0
-    .extloc: dd 30, swap_dword(30)
+    .extloc: dd 34, swap_dword(34)
     .datlen: dd 2048, swap_dword(2048)
     .recdate: times 7 db 0
     .fileflags: db 0b00000010
@@ -65,6 +65,7 @@ entry4:
     .volseqnum: dw 1, swap_word(1)
     .namelen: db 8
     .name: db 'MICROSYS'
+    .fileid: db 59, '1'
     .padding: db 0
 
 times (2048*1)-($-$$) db 0
