@@ -19,9 +19,10 @@ nasm 'source/kernel.asm' -f bin -o 'build/kernel.bin';
 nasm 'source/microsysdir.asm' -f bin -o 'build/microsysdir.bin';
 nasm 'source/config.asm' -f bin -o 'build/config.bin';
 nasm 'source/keybrd.asm' -f bin -o 'build/keybrd.bin';
+nasm 'source/cmdprmpt.asm' -f bin -o 'build/cmdprmpt.bin';
 
 # Combine binaries
-cat 'build/sysarea.bin' 'build/voldesc.bin' 'build/bootcat.bin' 'build/lptab.bin' 'build/mptab.bin' 'build/rootdir.bin' 'build/boot.bin' 'build/kernel.bin' 'build/microsysdir.bin' 'build/config.bin' 'build/keybrd.bin' > 'images/disk1.iso';
+cat 'build/sysarea.bin' 'build/voldesc.bin' 'build/bootcat.bin' 'build/lptab.bin' 'build/mptab.bin' 'build/rootdir.bin' 'build/boot.bin' 'build/kernel.bin' 'build/microsysdir.bin' 'build/config.bin' 'build/keybrd.bin' 'build/cmdprmpt.bin' > 'images/disk1.iso';
 
 # Resize disk image
 python 'diskresize.py';

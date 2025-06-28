@@ -53,5 +53,19 @@ entry3:
     .name: db 'KEYBRD.SYS'
     .fileid: db 59, '1'
     .padding: db 0
+entry4:
+    .length: db 48
+    .attrlen: db 0
+    .extloc: dd 37, swap_dword(37)
+    .datlen: dd 2048, swap_dword(2048)
+    .recdate: times 7 db 0
+    .fileflags: db 0b00000000
+    .unitssize: db 0
+    .interleave: db 0
+    .volseqnum: dw 1, swap_word(1)
+    .namelen: db 14
+    .name: db 'CMDPRMPT.APP'
+    .fileid: db 59, '1'
+    .padding: db 0
 
 times (2048*1)-($-$$) db 0

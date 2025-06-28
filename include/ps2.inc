@@ -26,6 +26,12 @@ ps2writecom:
     ret
 
 ; OUTPUT
+; al    status byte
+ps2getstatus:
+    in al, 0x64
+    ret
+
+; OUTPUT
 ; al    data
 ps2waitdata:
     call ps2pollread

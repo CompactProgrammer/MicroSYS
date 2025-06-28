@@ -125,4 +125,7 @@ knlnotfoundmsg: db 13, 10, 'Kernel not found, reboot to try again', 0
 
 hexbytestr: times 3 db 0
 
+fnlen: db 0
+filename:
+
 times 2048-($-$$) db 0
